@@ -402,8 +402,9 @@ Bitfield.prototype.setBit = function(bitIndex, val)
         return -1;
     }
 
+    var localBitIndex = bitIndex % BITS_PER_CHAR;
     var decoded = decodeCharToNum(this.encodedString[charIndex]);
-    var newNum = (decoded & ~(1 << bitIndex)) | (val << bitIndex);
+    var newNum = (decoded & ~(1 << localBitIndex)) | (val << localBitIndex);
     var newChar = encodeNumToChar(newNum);
     this.encodedString = this.setCharAt(this.encodedString,charIndex,newChar);
 }
