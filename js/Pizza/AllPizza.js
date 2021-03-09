@@ -18,6 +18,8 @@ var KitchenData = {
         RADIUS_OF_TOPPINGS_WITHIN_CRUST: 0.4,       // TODO: get this from Anthony/art specs
     },
 
+    RarityLevels: ["Common", "R2", "Rare", "R4", "Super Rare"],
+
     // TODO: refactor these so that boxes crusts, sauces, cheeses contains variant objects, each with different rarities.
     Boxes: [
         // Variant
@@ -333,13 +335,22 @@ function createAndAppendRenderObjFromVariant(rand, variant, displayBundle, textu
 }
 
 
-///////////////////////
+///////////////////////////
 // char encoding
-///////////////////////
+//  TODO: make this a class
+///////////////////////////
+
 const encodingString = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-.";
 var charToNumMap = new Map();
 for (var i = 0; i < encodingString.length; i++)
-    charToNumMap[encodingString[i]] = i;
+  charToNumMap.set(encodingString[i], i);
+
+function isInEncodingSet(c) {
+    if (charToNumMap.has(c) == true)
+        return true;
+    else
+        return false;
+}
 
 function encodeNumToChar(num) {
     if (num < 0 || num >= encodingString.length)
@@ -351,7 +362,45 @@ function encodeNumToChar(num) {
 }
 
 function decodeCharToNum(c) {
-    return charToNumMap[c];
+    return charToNumMap.get(c);
+}
+
+
+/////////////////////////////////////////
+// Encoder class
+/////////////////////////////////////////
+function Encoder(str) {
+    this.encodingString = str;
+    this.MAX_NUM = this.encodingString.length;  // max number that can be encoded 
+    this.charToNumMap = new Map();
+    for (var i = 0; i < this.encodingString.length; i++)
+        this.charToNumMap.set(this.encodingString[i], i);
+
+    // calc max bits stored in each char
+    this.MAX_BITS = 0;
+    var x = this.MAX_NUM;
+    while (x > 0)
+    {
+        this.MAX_BITS++;  
+        x = Math.floor(x / 2);
+    }
+}
+
+Encoder.prototype.contains = function(chr) {
+    return this.charToNumMap.has(chr);
+}
+
+Encoder.prototype.encodeNumber = function(num) {
+    if (num < 0 || num >= this.encodingString.length)
+    {
+        console.log("ERROR! out of range.");
+        return 0;
+    }
+    return this.encodingString[num];
+}
+
+Encoder.prototype.decodeChar = function(chr) {
+    return this.charToNumMap.get(chr);
 }
 
 
@@ -361,7 +410,18 @@ function decodeCharToNum(c) {
 
 function Bitfield(str) {
     this.encodedString = str;
+    this.BITS_PER_CHAR = 6;
 }
+
+Bitfield.prototype.growBy = function(len) {
+    this.encodedString = this.encodedString.padEnd(30, "0");
+}
+
+Bitfield.prototype.getString = function(len) {
+    return this.encodedString;
+}
+
+
 
 Bitfield.prototype.setCharAt = function(str,index,chr) {
     if(index > str.length-1) 
@@ -374,10 +434,8 @@ Bitfield.prototype.setCharAt = function(str,index,chr) {
 // 0 <= bitIndex <= BITS_PER_CHAR - 1
 Bitfield.prototype.getBit = function(bitIndex) 
 {
-    const BITS_PER_CHAR = 6;
-
     // check if within range
-    var charIndex = Math.floor(bitIndex / BITS_PER_CHAR);
+    var charIndex = Math.floor(bitIndex / this.BITS_PER_CHAR);
     if (charIndex >= str.length)
     {
         console.log("bit out of range.");
@@ -392,17 +450,15 @@ Bitfield.prototype.getBit = function(bitIndex)
 
 Bitfield.prototype.setBit = function(bitIndex, val) 
 {
-    const BITS_PER_CHAR = 6;
-
     // check if within range
-    var charIndex = Math.floor(bitIndex / BITS_PER_CHAR);
+    var charIndex = Math.floor(bitIndex / this.BITS_PER_CHAR);
     if (charIndex >= this.encodedString.length)
     {
         console.log("bit out of range.");
         return -1;
     }
 
-    var localBitIndex = bitIndex % BITS_PER_CHAR;
+    var localBitIndex = bitIndex % this.BITS_PER_CHAR;
     var decoded = decodeCharToNum(this.encodedString[charIndex]);
     var newNum = (decoded & ~(1 << localBitIndex)) | (val << localBitIndex);
     var newChar = encodeNumToChar(newNum);
@@ -411,17 +467,17 @@ Bitfield.prototype.setBit = function(bitIndex, val)
 
 Bitfield.prototype.DEBUG_printOnBits = function() 
 {
-    const BITS_PER_CHAR = 6;
     console.log("print on bits for: " + this.encodedString);
     // for each char in the encoded string..
     for (var iChar = 0; iChar < this.encodedString.length; iChar++)
     {
         var c = this.encodedString[iChar];
         var num = decodeCharToNum(c);
+
         var localBitIndex = 0;
         while (num > 0)
         {
-            var actualBitIndex = iChar * BITS_PER_CHAR + localBitIndex;
+            var actualBitIndex = iChar * this.BITS_PER_CHAR + localBitIndex;
             if (num % 2 == 1)
                 console.log("bit " + actualBitIndex + " is set.");
             num = num >> 1;
@@ -431,72 +487,118 @@ Bitfield.prototype.DEBUG_printOnBits = function()
 }
 
 
+Bitfield.prototype.countOnBits = function() 
+{
+    var numOnBits = 0;
+    // for each char in the encoded string..
+    for (var iChar = 0; iChar < this.encodedString.length; iChar++)
+    {
+        var c = this.encodedString[iChar];
+        var num = decodeCharToNum(c);
+        var localBitIndex = 0;
+        while (num > 0)
+        {
+            var actualBitIndex = iChar * this.BITS_PER_CHAR + localBitIndex;
+            if (num % 2 == 1)
+                numOnBits++;
+            num = num >> 1;
+            localBitIndex++;
+        }
+    }
+    return numOnBits;
+}
+
+Bitfield.prototype.getOnBits = function() 
+{
+    var onBits = [];
+    // for each char in the encoded string..
+    for (var iChar = 0; iChar < this.encodedString.length; iChar++)
+    {
+        var c = this.encodedString[iChar];
+        var num = decodeCharToNum(c);
+        var localBitIndex = 0;
+        while (num > 0)
+        {
+            var actualBitIndex = iChar * this.BITS_PER_CHAR + localBitIndex;
+            if (num % 2 == 1)
+                onBits.push(actualBitIndex);
+            num = num >> 1;
+            localBitIndex++;
+        }
+    }
+    return onBits;
+}
+
+
 //////////////////////////////////////////
 // Pizza
 //////////////////////////////////////////
 function Pizza() {
+    this.DNA_DELIM = '_';
 }
 
 Pizza.prototype.makeRandom = function(overrides, KitchenData) 
 {
     var pizzaDNA = 0;
 
-    // calc random seed
-    // create box index
-    // create crust index
-    // create sauces mask
-    //  - count
-    //  - rotations
-    // create cheeses mask   
-     //  - count
-    //  - rotations   
-    // create toppings mask
-    //  - count
-    //  - rotations
-    //  - scales
-
     // don't use the pizza rand to create topping indices as then it won't match up with the 
     // rand on the other side when a pizza is created from the same seed
     var localRand = mulberry32(Date.now() - 100);
 
     // randomly choose box
-    this.boxIndex = randomRange(localRand, 0, KitchenData.Boxes.length - 1);
+    this.boxMask = new Bitfield("00");
+    this.boxMask.setBit(randomRange(localRand, 0, KitchenData.Boxes.length - 1), 1);
+  //  this.boxIndex = randomRange(localRand, 0, KitchenData.Boxes.length - 1);
+
 
     // TODO: paper underlayment?
+    this.paperMask = new Bitfield("00");
 
     // randomly choose crust
-    this.crustIndex = randomRange(localRand, 0, KitchenData.Crusts.length - 1);
+    this.crustMask = new Bitfield("00");
+    this.crustMask.setBit(randomRange(localRand, 0, KitchenData.Crusts.length - 1), 1);
+    //this.crustIndex = randomRange(localRand, 0, KitchenData.Crusts.length - 1);
 
     // randomly choose sauce
     // TODO: take into account rarity, etc.
-    this.sauceIndices = [];
+    //this.sauceIndices = [];
+    this.sauceMask = new Bitfield("00");
     var numSauces = randomRange(localRand, 0, KitchenData.Sauces.length);
     for (var iSauce = 0; iSauce < numSauces; iSauce++)
     {
-        this.sauceIndices.push(randomRange(localRand, 0, KitchenData.Sauces.length - 1));
+        //this.sauceIndices.push(randomRange(localRand, 0, KitchenData.Sauces.length - 1));
+        this.sauceMask.setBit(randomRange(localRand, 0, KitchenData.Sauces.length - 1), 1);
     }
 
     // randomly choose cheese
     // TODO: take into account rarity, etc.
-    this.cheeseIndices = [];
+    //this.cheeseIndices = [];
+    this.cheeseMask = new Bitfield("00");
     var numCheeses = randomRange(localRand, 0, KitchenData.Cheeses.length);
     for (var iCheese = 0; iCheese < numCheeses; iCheese++)
     {
-        this.cheeseIndices.push(randomRange(localRand, 0, KitchenData.Cheeses.length - 1));
+        //this.cheeseIndices.push(randomRange(localRand, 0, KitchenData.Cheeses.length - 1));
+        this.cheeseMask.setBit(randomRange(localRand, 0, KitchenData.Cheeses.length - 1), 1);
     }
 
     // randomly choose toppings
     // TODO: take into account rarity, etc.
-    this.toppingIndices = [];
+    //this.toppingIndices = [];
+    this.toppingMask = new Bitfield("");
+    this.toppingMask.growBy(30);
     var numToppings = randomRange(localRand, 0, KitchenData.Toppings.length);
     for (var iTopping = 0; iTopping < numToppings; iTopping++)
     {
-        this.toppingIndices.push(randomRange(localRand, 0, KitchenData.Toppings.length - 1));
+        //this.toppingIndices.push(randomRange(localRand, 0, KitchenData.Toppings.length - 1));
+        this.toppingMask.setBit(randomRange(localRand, 0, KitchenData.Toppings.length - 1), 1);
     }
 
     // choose and seed random generator
     this.seed = Date.now(); // TODO: choose better seed?
     this.rand = mulberry32(this.seed); 
+
+    // HACK for now set derivative values
+    this.HACK_setDerivativeValues();
 
     this.dna = this.calculateDNA();
     return this.dna;
@@ -504,34 +606,137 @@ Pizza.prototype.makeRandom = function(overrides, KitchenData)
 
 Pizza.prototype.makeFromDna = function(dna) 
 {
-    this.dna = dna;
+    // DNA is like this:
+    // OVERALL:  "version" + "dna" + "_" + seed
+    // version:
+    //      - 2 chars (major and minor)
+    // dna:
+    //      - 2 chars for box mask
+    //      - 2 chars for paper mask
+    //      - 2 chars for crust mask
+    //      - 2 chars for sauce mask
+    //      - 2 chars for cheese mask
+    //      - 30 chars for topping mask  (6 toppings per char = 180 possible toppings)
+    //      - for each selected element above (boxes, papers, crusts, sauces, cheeses, toppings):
+    //              - 2 chars:
+    //                     - first char is instance count
+    //                      - 2nd char:
+    //                          - first 3 bits are rare variant index (r1 - r5)
+    //                          - 2nd 3 bits are scatter method index
 
-    var currIndex = 0;
-    this.boxIndex = decodeCharToNum(dna[currIndex++]);
-    this.crustIndex = decodeCharToNum(dna[currIndex++]);   
-    var numSauces = decodeCharToNum(dna[currIndex++]);
-    this.sauceIndices = [];
-    for (var i = 0; i < numSauces; i++)
-        this.sauceIndices.push(decodeCharToNum(dna[currIndex++]));
-    var numCheeses = decodeCharToNum(dna[currIndex++]);        
-    this.cheeseIndices = [];
-    for (var i = 0; i < numCheeses; i++)
-        this.cheeseIndices.push(decodeCharToNum(dna[currIndex++]));
-    var numToppings = decodeCharToNum(dna[currIndex++]);        
-    this.toppingIndices = [];
-    for (var i = 0; i < numToppings; i++)
-       this.toppingIndices.push(decodeCharToNum(dna[currIndex++]));
+    // first, we can check to see if any character is outside our encoding char set.
+    //    (EXCEPT FOR OUR DELIM "_")
+    //   if so it's illegal.
+    // TODO: break this out to static class function
+    for (var iChar = 0; iChar < dna.length; iChar++)
+    {
+        var c = dna[iChar];
+        if ((isInEncodingSet(c) == false) && (c != this.DNA_DELIM))
+        {
+            console.log("illegal dna.");
+            return -1;
+        }
+    }
+
+    // here break off the seed
+    const tokens = dna.split(this.DNA_DELIM);
+    if (tokens.length != 2)
+    {
+        console.log("illegal dna.");
+        return -1;
+    }
+    this.seed = parseInt(tokens[1]);
+
+    // read version
+    this.version = dna.substring(0, 2);
+    // TODO: READING THE REST DEPENDS ON WHICH VERSION IT IS!
+    this.boxMask = new Bitfield(dna.substring(2, 4));   
+    this.paperMask = new Bitfield(dna.substring(4, 6));  
+    this.crustMask = new Bitfield(dna.substring(6, 8)); 
+    this.sauceMask = new Bitfield(dna.substring(8, 10));     
+    this.cheeseMask = new Bitfield(dna.substring(10, 12)); 
+    this.toppingMask = new Bitfield(dna.substring(12, 42)); 
+
     
-    // the rest is the seed
-    this.seed = parseInt(dna.slice(currIndex));
+    // HACK for now set derivative values
+    this.HACK_setDerivativeValues();
+
+    // TODO: read the per-ingredient settings (2 chars per)
+    // if any are missing then we will just randomly select HERE AND NOW (basically, updating the dna string)
+
+    // create rand from seed
     this.rand = mulberry32(this.seed); 
+
+    // if we got this far then it's a valid dna, so assign it
+    this.dna = dna;
 }
+
+
+
+// HACK for now set derivative values
+Pizza.prototype.HACK_setDerivativeValues = function() {
+        // LATER WE CAN DEPRECATE THESE since they are derivatives of  the masks above, but for now use them.
+    // box
+    var boxIndices = this.boxMask.getOnBits();
+    // for now support 1 box
+    if (boxIndices.length < 1)
+    {
+        console.log("illegal dna.");
+        return -1;
+    }
+    this.boxIndex = boxIndices[0];
+    // TODO: validate this is within range!
+
+    // TODO: we don't use paper (yet)
+
+    // crust
+    var crustIndices = this.crustMask.getOnBits();
+    // for now support 1 crust
+    if (crustIndices.length < 1)
+    {
+        console.log("illegal dna.");
+        return -1;
+    }
+    this.crustIndex = crustIndices[0];
+    // TODO: validate this is within range!
+
+    // sauces
+    this.sauceIndices = this.sauceMask.getOnBits();
+
+    // cheeses
+    this.cheeseIndices = this.cheeseMask.getOnBits();  
+
+    // toppings
+    this.toppingIndices = this.toppingMask.getOnBits();   
+
+}
+
 
 
 Pizza.prototype.calculateDNA = function() {
     // for now, a string:
     var dna = "";
 
+    this.CURRENT_VERSION_MAJOR = 0;
+    this.CURRENT_VERSION_MINOR = 1;   
+    dna += encodeNumToChar(this.CURRENT_VERSION_MAJOR);
+    dna += encodeNumToChar(this.CURRENT_VERSION_MINOR);
+
+    dna += this.boxMask.getString();
+    dna += this.paperMask.getString();
+    dna += this.crustMask.getString();
+    dna += this.sauceMask.getString();
+    dna += this.cheeseMask.getString();
+    dna += this.toppingMask.getString();
+    // TODO: per-ingredient settings (instance count, rarity index, scatter method index)
+
+    dna += this.DNA_DELIM;
+    dna += this.seed;
+
+    return dna;
+
+
+/*    
     dna += encodeNumToChar(this.boxIndex);
     dna += encodeNumToChar(this.crustIndex);
 
@@ -555,6 +760,7 @@ Pizza.prototype.calculateDNA = function() {
 
     // return
     return dna;
+*/  
 }
 
 
