@@ -7,10 +7,9 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
-
-// TODO: make an editor for this!!
-// then read it in from JSON(s) files.
-
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// Kitchen Data (hard-coded but soon read from JSON and created/modified via importer and editor)
+//////////////////////////////////////////////////////////////////////////////////////////////////
 var KitchenData = {
 
     Rules: { 
@@ -175,17 +174,9 @@ var KitchenData = {
 }
 
 
-
-
-/////////////////////////////////////////////////////////////////////////////////
-//
-// Pizza
-// Jamie Davis
-// 2021
-//
-/////////////////////////////////////////////////////////////////////////////
-
-
+//////////////////////////////////////
+// The Rand function
+//////////////////////////////////////
 // TODO: a better rand func?
 // it needs to be cross platform, cross-language, etc.
 function mulberry32(a) {
@@ -209,7 +200,9 @@ function hash(str) {
   }
   
 
+//////////////////////////////////
 // Utils
+//////////////////////////////////
 function randomRange(rand, min, max) 
 {
     return Math.round(((rand() * (max - min)) + min));
@@ -219,9 +212,6 @@ function randomRangeFloat(rand, min, max)
 {
     return ((rand() * (max - min)) + min);
 }
-
-
-// normalized -1 to 1
 
 var PI = 3.14159;
 var TWO_PI = 2.0 * PI;
@@ -234,13 +224,18 @@ function randomPointOnCircle(rand, centerX, centerY, radius)
     return [x,y];
 }
 
+
+/////////////////////////////////////////////////////////////////
+// Scatters
+/////////////////////////////////////////////////////////////////
 function randomScatter(rand, t, renderObj, KitchenData) {
     // subtract scale radius from the crust radius so the topping will fit inside (somewhat, it could still be rotate further out, but okay)
     return randomPointOnCircle(rand, 0.5, 0.5, KitchenData.Rules.RADIUS_OF_TOPPINGS_WITHIN_CRUST - renderObj.scale / 2.0); 
 }
 
-
-
+//////////////////////////////////////////////////
+// Display List
+//////////////////////////////////////////////////
 function generateDisplayList(pizza, KitchenData) {
     // this will output a normalized display list
     // it may include a texture dictionary as well
@@ -296,8 +291,6 @@ function generateDisplayList(pizza, KitchenData) {
 
 }
 
-
-// for now scatter is bool, but later will be a callback or delegate
 function createAndAppendRenderObjFromVariant(rand, variant, displayBundle, textureToIndexMap, scatter) {
     var renderObj = {};
     var imageIndex = randomRange(rand, 0, variant.imageUrls.length - 1);  
@@ -340,9 +333,10 @@ function createAndAppendRenderObjFromVariant(rand, variant, displayBundle, textu
 }
 
 
-
+///////////////////////
 // char encoding
-const encodingString = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+///////////////////////
+const encodingString = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-.";
 var charToNumMap = new Map();
 for (var i = 0; i < encodingString.length; i++)
     charToNumMap[encodingString[i]] = i;
@@ -361,6 +355,84 @@ function decodeCharToNum(c) {
 }
 
 
+////////////////////
+// Bitfield
+////////////////////
+
+function Bitfield(str) {
+    this.encodedString = str;
+}
+
+Bitfield.prototype.setCharAt = function(str,index,chr) {
+    if(index > str.length-1) 
+    {
+        return str;
+    }
+    return str.substring(0,index) + chr + str.substring(index+1);
+}
+
+// 0 <= bitIndex <= BITS_PER_CHAR - 1
+Bitfield.prototype.getBit = function(bitIndex) 
+{
+    const BITS_PER_CHAR = 6;
+
+    // check if within range
+    var charIndex = Math.floor(bitIndex / BITS_PER_CHAR);
+    if (charIndex >= str.length)
+    {
+        console.log("bit out of range.");
+        return -1;
+    }
+
+    var decoded = decodeCharToNum(this.encodedString[charIndex]);
+    return (decoded & (1 << bitIndex));
+
+}
+
+
+Bitfield.prototype.setBit = function(bitIndex, val) 
+{
+    const BITS_PER_CHAR = 6;
+
+    // check if within range
+    var charIndex = Math.floor(bitIndex / BITS_PER_CHAR);
+    if (charIndex >= this.encodedString.length)
+    {
+        console.log("bit out of range.");
+        return -1;
+    }
+
+    var decoded = decodeCharToNum(this.encodedString[charIndex]);
+    var newNum = (decoded & ~(1 << bitIndex)) | (val << bitIndex);
+    var newChar = encodeNumToChar(newNum);
+    this.encodedString = this.setCharAt(this.encodedString,charIndex,newChar);
+}
+
+Bitfield.prototype.DEBUG_printOnBits = function() 
+{
+    const BITS_PER_CHAR = 6;
+    console.log("print on bits for: " + this.encodedString);
+    // for each char in the encoded string..
+    for (var iChar = 0; iChar < this.encodedString.length; iChar++)
+    {
+        var c = this.encodedString[iChar];
+        var num = decodeCharToNum(c);
+        var localBitIndex = 0;
+        while (num > 0)
+        {
+            var actualBitIndex = iChar * BITS_PER_CHAR + localBitIndex;
+            if (num % 2 == 1)
+                console.log("bit " + actualBitIndex + " is set.");
+            num = num >> 1;
+            localBitIndex++;
+        }
+    }
+}
+
+
+//////////////////////////////////////////
+// Pizza
+//////////////////////////////////////////
 function Pizza() {
 }
 
@@ -485,7 +557,9 @@ Pizza.prototype.calculateDNA = function() {
 }
 
 
-
+///////////////////////////////////////////////////
+// exports
+///////////////////////////////////////////////////
 exports.Pizza = Pizza
 exports.generateDisplayList = generateDisplayList
 exports.randomScatter = randomScatter
