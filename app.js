@@ -28,5 +28,5 @@ http.createServer(function(request, response) {
 
     // output json
     response.end(JSON.stringify(ret));
-  }).listen(8888);
+  }).listen(80);
   
