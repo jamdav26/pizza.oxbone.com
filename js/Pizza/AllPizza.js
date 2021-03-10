@@ -232,7 +232,7 @@ function randomPointOnCircle(rand, centerX, centerY, radius)
 /////////////////////////////////////////////////////////////////
 function randomScatter(rand, t, renderObj, KitchenData) {
     // subtract scale radius from the crust radius so the topping will fit inside (somewhat, it could still be rotate further out, but okay)
-    return randomPointOnCircle(rand, 0.5, 0.5, KitchenData.Rules.RADIUS_OF_TOPPINGS_WITHIN_CRUST - renderObj.scale / 2.0); 
+    return randomPointOnCircle(rand, 0.0, 0.0, KitchenData.Rules.RADIUS_OF_TOPPINGS_WITHIN_CRUST - renderObj.scale / 2.0); 
 }
 
 //////////////////////////////////////////////////
@@ -328,7 +328,7 @@ function createAndAppendRenderObjFromVariant(rand, variant, displayBundle, textu
     if (scatter)
         renderObj.center = scatter(rand, 0, renderObj, KitchenData); 
     else
-        renderObj.center = [0.5, 0.5];        
+        renderObj.center = [0.0, 0.0];        
 
     displayBundle.displayList.push(renderObj);   
     return renderObj;
