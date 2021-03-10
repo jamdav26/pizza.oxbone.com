@@ -17,14 +17,28 @@ http.createServer(function(request, response) {
     // return object (jsonified)
     var ret = {};
 
-    // make pizza
-    // TODO: this might be passed into the URL,so need need to generate
-    var pizza = new Pizza();
-    pizza.makeRandom({}, KitchenData);
-    ret.dna = pizza.dna;
+    var q = url.parse(request.url, true);
+    var qdata = q.query; 
+    var dna = qdata.dna;
 
-    // generate display list
-    ret.displayBundle = generateDisplayList(pizza, KitchenData);
+    // make pizza
+    var pizza = new Pizza();
+    if (dna == null || dna == undefined)
+      pizza.makeRandom({}, KitchenData);
+    else
+      pizza.makeFromDna(dna);  
+
+    if (pizza.dna == null || pizza.dna == undefined || pizza.dna == false)
+    {
+      ret = {error: "illegal dna."};
+    } 
+    else {
+
+      ret.dna = pizza.dna;
+
+      // generate display list
+      ret.displayBundle = generateDisplayList(pizza, KitchenData);
+    }
 
     // output json
     response.end(JSON.stringify(ret));
