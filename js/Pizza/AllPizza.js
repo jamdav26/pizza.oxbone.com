@@ -20,6 +20,12 @@ var KitchenData = {
 
     RarityLevels: ["Common", "R2", "Rare", "R4", "Super Rare"],
 
+    ScatterMethods: [
+        {name: "Random", method: randomScatter},
+        {name: "Spiral", method: spiralScatter},
+        {name: "Smiley", method: smileyScatter},      
+    ],
+
     // TODO: refactor these so that boxes crusts, sauces, cheeses contains variant objects, each with different rarities.
     Boxes: [
         // Variant
@@ -217,7 +223,7 @@ function randomRangeFloat(rand, min, max)
 
 var PI = 3.14159;
 var TWO_PI = 2.0 * PI;
-function randomPointOnCircle(rand, centerX, centerY, radius)
+function randomPointOnDisk(rand, centerX, centerY, radius)
 {
     var theta = TWO_PI * rand();
     var r = Math.sqrt(rand());
@@ -230,10 +236,90 @@ function randomPointOnCircle(rand, centerX, centerY, radius)
 /////////////////////////////////////////////////////////////////
 // Scatters
 /////////////////////////////////////////////////////////////////
-function randomScatter(rand, t, renderObj, KitchenData) {
-    // subtract scale radius from the crust radius so the topping will fit inside (somewhat, it could still be rotate further out, but okay)
-    return randomPointOnCircle(rand, 0.0, 0.0, KitchenData.Rules.RADIUS_OF_TOPPINGS_WITHIN_CRUST - renderObj.scale / 2.0); 
+function randomScatter(rand, count, renderObjList, KitchenData) {
+    var ret = [];
+    for (var i = 0; i < count; i++)
+    {
+        // subtract scale radius from the crust radius so the topping will fit inside (somewhat, it could still be rotate further out, but okay)
+        ret.push(randomPointOnDisk(rand, 0.0, 0.0, KitchenData.Rules.RADIUS_OF_TOPPINGS_WITHIN_CRUST - renderObjList[i].scale / 2.0));
+    }
+    return ret;
 }
+
+function spiralScatter(rand, count, renderObjList, KitchenData) {
+    // 
+    // r=a + b * angle
+    // 
+    // choose a rate that angle moves and rate that radius increases
+    // TODO: these should be part of scatter method data??
+    var angleVel = PI / 5;
+    var rVel = 0.04;
+    var currAngle = 0;
+    var currR = 0;
+    var ret = [];
+    for (var i = 0; i < count; i++)
+    {
+        // rotate currR thru currAngle. that is position
+        var x = currR * Math.cos(currAngle);
+        var y = currR * Math.sin(currAngle);
+
+        // accum
+        currAngle += angleVel;
+        currR += rVel;
+
+        ret.push([x,y]);
+    }
+    return ret;
+}
+
+
+
+function smileyScatter(rand, count, renderObjList, KitchenData) {
+    var ret = [];
+    
+    var used = 0;
+
+    // place left eye
+    if (used < count)
+    {
+        var len = (KitchenData.Rules.RADIUS_OF_TOPPINGS_WITHIN_CRUST - renderObjList[used].scale / 2.0) / 1.5;
+        var angle = -3 * PI / 4;
+
+        var x = len * Math.cos(angle);
+        var y = len * Math.sin(angle);
+
+        ret.push([x,y]);
+        used++;
+    }
+
+    // place right eye
+    if (used < count)
+    {
+        var len = (KitchenData.Rules.RADIUS_OF_TOPPINGS_WITHIN_CRUST - renderObjList[used].scale / 2.0) / 1.5;
+        var angle = -PI / 4;
+
+        var x = len * Math.cos(angle);
+        var y = len * Math.sin(angle);
+
+        ret.push([x,y]);
+        used++;
+    }
+
+    // place smile
+    var startX = -.25;
+
+    var numSteps = count - used;
+    for (var i = 0; i < numSteps; i++)
+    {
+        var x = startX + i * (0.5 / numSteps);
+        var y = 0.25;
+        ret.push([x,y]);
+    }
+
+    return ret;
+}
+
+
 
 //////////////////////////////////////////////////
 // Display List
@@ -253,19 +339,22 @@ function generateDisplayList(pizza, KitchenData) {
     // box
     renderObj = {};
     var box = KitchenData.Boxes[pizza.boxIndex];
-    createAndAppendRenderObjFromVariant(pizza.rand, box, displayBundle, textureToIndexMap, null);   
+    renderObj = createAndAppendRenderObjFromVariant(pizza.rand, box, displayBundle, textureToIndexMap);   
+    displayBundle.displayList.push(renderObj);
 
     // crust
     renderObj = {};
     var crust = KitchenData.Crusts[pizza.crustIndex];
-    createAndAppendRenderObjFromVariant(pizza.rand, crust, displayBundle, textureToIndexMap, null);   
+    renderObj = createAndAppendRenderObjFromVariant(pizza.rand, crust, displayBundle, textureToIndexMap);   
+    displayBundle.displayList.push(renderObj);
 
     // sauce
     for (var i = 0; i < pizza.sauceIndices.length; i++)
     {
         renderObj = {};
         var sauce = KitchenData.Sauces[i];
-        createAndAppendRenderObjFromVariant(pizza.rand, sauce, displayBundle, textureToIndexMap, null); 
+        renderObj = createAndAppendRenderObjFromVariant(pizza.rand, sauce, displayBundle, textureToIndexMap); 
+        displayBundle.displayList.push(renderObj);
     }  
     
     // cheese
@@ -273,7 +362,8 @@ function generateDisplayList(pizza, KitchenData) {
     {
         renderObj = {};
         var cheese = KitchenData.Cheeses[i];
-        createAndAppendRenderObjFromVariant(pizza.rand, cheese, displayBundle, textureToIndexMap, null); 
+        renderObj = createAndAppendRenderObjFromVariant(pizza.rand, cheese, displayBundle, textureToIndexMap); 
+        displayBundle.displayList.push(renderObj);
     }  
 
     // Toppings
@@ -282,10 +372,32 @@ function generateDisplayList(pizza, KitchenData) {
         var toppingIndex = pizza.toppingIndices[i];
         var topping = KitchenData.Toppings[toppingIndex];
 
+        // TODO: later the count might be embedded in the dna, so it will be calculated in the make() function
         var toppingCount = randomRange(pizza.rand, topping.countVarianceMinMax[0], topping.countVarianceMinMax[1]);
+
+        // scatter
+        // we might a scatter min/max queries so we know if a particular scatter will work with the number of coords we chose, 
+        // and if not adjust them or choose another scatter. all that should probably be done in the make function
+        // TODO: get this from pizza dna for this topping, or for now randomly choose it? 
+        // TODO: should be based on rarity of scatter
+        var scatterIndex = 0; //randomRange(pizza.rand, 0, KitchenData.ScatterMethods.length - 1);
+        var scatter = KitchenData.ScatterMethods[scatterIndex].method;
+
+        var toppingRenderObjs = [];
         for (var iCount = 0; iCount < toppingCount; iCount++)
         {
-            createAndAppendRenderObjFromVariant(pizza.rand, topping, displayBundle, textureToIndexMap, randomScatter);   
+            renderObj = createAndAppendRenderObjFromVariant(pizza.rand, topping, displayBundle, textureToIndexMap, scatter);  
+            toppingRenderObjs.push(renderObj); 
+        }
+
+        // now call scatter to get positions, then append them
+        var positions = scatter(pizza.rand, toppingCount, toppingRenderObjs, KitchenData);
+        // TODO: assert positions.length == toppingCount
+        for (var iCount = 0; iCount < toppingCount; iCount++)
+        {
+            renderObj = toppingRenderObjs[iCount];
+            renderObj.center = positions[iCount];
+            displayBundle.displayList.push(renderObj);
         }
     }
 
@@ -293,7 +405,7 @@ function generateDisplayList(pizza, KitchenData) {
 
 }
 
-function createAndAppendRenderObjFromVariant(rand, variant, displayBundle, textureToIndexMap, scatter) {
+function createAndAppendRenderObjFromVariant(rand, variant, displayBundle, textureToIndexMap) {
     var renderObj = {};
     var imageIndex = randomRange(rand, 0, variant.imageUrls.length - 1);  
 
@@ -319,18 +431,8 @@ function createAndAppendRenderObjFromVariant(rand, variant, displayBundle, textu
     else
         renderObj.rotation = randomRangeFloat(rand, variant.rotationVarianceMinMax[0], variant.rotationVarianceMinMax[1]);  
 
-    // TODO: handle different scatter patterns besides random.
-    //  for some we might need to know total count of toppings
-    //  what might work is a scatter delegate that takes parameterized values and returns coords.
-    // then the scatter func that implement anything it wants, like smiley face, etc.
-    // we might a scatter min/max queries so we know if a particular scatter will work with the number of coords we chose, 
-    // and if not adjust them or choose another scatter.
-    if (scatter)
-        renderObj.center = scatter(rand, 0, renderObj, KitchenData); 
-    else
-        renderObj.center = [0.0, 0.0];        
+    renderObj.center = [0.0, 0.0];        
 
-    displayBundle.displayList.push(renderObj);   
     return renderObj;
 }
 
@@ -773,7 +875,7 @@ exports.randomScatter = randomScatter
 exports.mulberry32 = mulberry32
 exports.randomRange = randomRange
 exports.randomRangeFloat = randomRangeFloat
-exports.randomPointOnCircle = randomPointOnCircle
+exports.randomPointOnDisk = randomPointOnDisk
 exports.KitchenData = KitchenData
 
 
