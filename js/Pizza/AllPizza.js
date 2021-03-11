@@ -252,13 +252,15 @@ function spiralScatter(rand, count, renderObjList, KitchenData) {
     // 
     // choose a rate that angle moves and rate that radius increases
     // TODO: these should be part of scatter method data??
-    var angleVel = PI / 5;
-    var rVel = 0.04;
-    var currAngle = 0;
+    var angleVel = 3 * PI / count;
+    var rVel = KitchenData.Rules.RADIUS_OF_TOPPINGS_WITHIN_CRUST / count;
+    var currAngle = randomRangeFloat(rand, 0, TWO_PI);
     var currR = 0;
     var ret = [];
     for (var i = 0; i < count; i++)
     {
+        currR = Math.min(currR, KitchenData.Rules.RADIUS_OF_TOPPINGS_WITHIN_CRUST - renderObjList[i].scale / 2.0);
+
         // rotate currR thru currAngle. that is position
         var x = currR * Math.cos(currAngle);
         var y = currR * Math.sin(currAngle);
