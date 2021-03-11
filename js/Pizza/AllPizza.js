@@ -329,40 +329,57 @@ function spokesScatter(rand, count, renderObjList, KitchenData) {
 
     // calculate number of spokes
     // calculate number of points per spoke
-    var numPointsPerSpoke = 3;
-    var numSpokes = count / numPointsPerSpoke;
-    // we put one in the middle if count is odd
-    if (count % 2 != 0)
+    const MIN_POINTS_PER_SPOKE = 2;
+    const MAX_POINTS_PER_SPOKE = 6;
+    var maxPerSpoke = randomRange(rand, MIN_POINTS_PER_SPOKE, MAX_POINTS_PER_SPOKE);
+    var numSpokes = 2;
+    var numPointsPerSpoke = Math.floor(count / numSpokes);
+    while (numPointsPerSpoke > maxPerSpoke)
+    {
+        numSpokes++;
+        numPointsPerSpoke = Math.floor(count / numSpokes);
+    }
+
+    // now calculate the excess (how many more we have than we will scatter on the spokes)
+    var extra = count - (numSpokes * numPointsPerSpoke);
+
+
+    var iCount = 0;
+    // HACK: for now put extras in the middle, but later may want to randomize it
+    for  (var iExtra = 0; iExtra < extra; iExtra++)
     {
         ret.push([0,0]);
-        count--;
+        iCount++;
     }
 
     // if count > 0
-    if (count > 0)
-    {
-        // for each spoke
-        // calculate angle increment
+    if (numSpokes * numPointsPerSpoke > extra)
+    { 
+        // for each point on a spoke
+        var rInc = (KitchenData.Rules.RADIUS_OF_TOPPINGS_WITHIN_CRUST) / numPointsPerSpoke;
         var angInc = TWO_PI / numSpokes;
-        console.log("angInc = " + angInc);
-        for (var iSpoke = 0; iSpoke < numSpokes; iSpoke++)
+        var angStart = randomRange(rand, 0, PI);
+        for (var iPoint = 0; iPoint < numPointsPerSpoke; iPoint++)
         {
-            // choose angle
-           var angle = iSpoke * angInc;
-           console.log("angle = " + angle);
-           // for each point on spoke
-           var rInc = (KitchenData.Rules.RADIUS_OF_TOPPINGS_WITHIN_CRUST) / numPointsPerSpoke;
-           console.log("rInc = " + rInc);
-           for (var iPoint = 0; iPoint < numPointsPerSpoke; iPoint++)
-           {
-                var len = iPoint * rInc;
-                console.log("len = " + len);
+            var len = (iPoint + 1) * rInc;
+
+            // adjust len so obj fits inside the play area
+            len = Math.min(len, KitchenData.Rules.RADIUS_OF_TOPPINGS_WITHIN_CRUST - renderObjList[iCount].scale / 2.0);
+
+            // for each spoke
+            for (var iSpoke = 0; iSpoke < numSpokes; iSpoke++)
+            {
+                // choose angle
+               var angle = angStart + iSpoke * angInc;
+
                 // calculate point
                 var x = len * Math.cos(angle);
                 var y = len * Math.sin(angle);
                 ret.push([x,y]);
-           }
-        }
+                iCount++;         
+            }
+        }   
+
     }
     return ret;
 
