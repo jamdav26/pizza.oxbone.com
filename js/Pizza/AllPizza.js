@@ -20,10 +20,12 @@ var KitchenData = {
 
     RarityLevels: ["Common", "R2", "Rare", "R4", "Super Rare"],
 
+    // TODO: we can't JSONIFY the methods like this, so need to figure something else out.
     ScatterMethods: [
-        {name: "Random", method: randomScatter},
-        {name: "Spiral", method: spiralScatter},
-        {name: "Smiley", method: smileyScatter},      
+        {name: "Random", rarity: 0, method: randomScatter},
+        {name: "Spiral", rarity: 0, method: spiralScatter},
+        {name: "Smiley", rarity: 4, method: smileyScatter},  
+        {name: "Spokes", rarity: 0, method: spokesScatter},            
     ],
 
     // TODO: refactor these so that boxes crusts, sauces, cheeses contains variant objects, each with different rarities.
@@ -236,6 +238,7 @@ function randomPointOnDisk(rand, centerX, centerY, radius)
 /////////////////////////////////////////////////////////////////
 // Scatters
 /////////////////////////////////////////////////////////////////
+
 function randomScatter(rand, count, renderObjList, KitchenData) {
     var ret = [];
     for (var i = 0; i < count; i++)
@@ -321,6 +324,50 @@ function smileyScatter(rand, count, renderObjList, KitchenData) {
     return ret;
 }
 
+function spokesScatter(rand, count, renderObjList, KitchenData) {
+    var ret = [];
+
+    // calculate number of spokes
+    // calculate number of points per spoke
+    var numPointsPerSpoke = 3;
+    var numSpokes = count / numPointsPerSpoke;
+    // we put one in the middle if count is odd
+    if (count % 2 != 0)
+    {
+        ret.push([0,0]);
+        count--;
+    }
+
+    // if count > 0
+    if (count > 0)
+    {
+        // for each spoke
+        // calculate angle increment
+        var angInc = TWO_PI / numSpokes;
+        console.log("angInc = " + angInc);
+        for (var iSpoke = 0; iSpoke < numSpokes; iSpoke++)
+        {
+            // choose angle
+           var angle = iSpoke * angInc;
+           console.log("angle = " + angle);
+           // for each point on spoke
+           var rInc = (KitchenData.Rules.RADIUS_OF_TOPPINGS_WITHIN_CRUST) / numPointsPerSpoke;
+           console.log("rInc = " + rInc);
+           for (var iPoint = 0; iPoint < numPointsPerSpoke; iPoint++)
+           {
+                var len = iPoint * rInc;
+                console.log("len = " + len);
+                // calculate point
+                var x = len * Math.cos(angle);
+                var y = len * Math.sin(angle);
+                ret.push([x,y]);
+           }
+        }
+    }
+    return ret;
+
+}
+
 
 
 //////////////////////////////////////////////////
@@ -382,7 +429,7 @@ function generateDisplayList(pizza, KitchenData) {
         // and if not adjust them or choose another scatter. all that should probably be done in the make function
         // TODO: get this from pizza dna for this topping, or for now randomly choose it? 
         // TODO: should be based on rarity of scatter
-        var scatterIndex = 0; //randomRange(pizza.rand, 0, KitchenData.ScatterMethods.length - 1);
+        var scatterIndex = randomRange(pizza.rand, 0, KitchenData.ScatterMethods.length - 1);
         var scatter = KitchenData.ScatterMethods[scatterIndex].method;
 
         var toppingRenderObjs = [];
