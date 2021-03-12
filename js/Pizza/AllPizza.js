@@ -66,18 +66,32 @@ var KitchenData = {
             sizeVarianceMinMax: [1.0, 1.0],
             countVarianceMinMax: [1,1],
             rotationVarianceMinMax: [-3.14159,3.14159]
-        }, 
-        {
-            name: "Moon",
-            imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/1200-base-crust-moon.png"],
-            sizeVarianceMinMax: [1.0, 1.0],
-            countVarianceMinMax: [1,1],
-            rotationVarianceMinMax: [-3.14159,3.14159]
-        },   
+        },  
     ],
 
 
     Sauces: [ 
+        {
+            name: "Tomato",
+            imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/rarepizzas-120-sauce-r0-tomato-v0.png"],
+            sizeVarianceMinMax: [1.0, 1.0],
+            countVarianceMinMax: [1,1],
+            rotationVarianceMinMax: [-3.14159,3.14159] 
+        }, 
+        {
+            name: "BBQ",
+            imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/rarepizzas-2-sauce-r2-bbq-v0.png"],
+            sizeVarianceMinMax: [1.0, 1.0],
+            countVarianceMinMax: [1,1],
+            rotationVarianceMinMax: [-3.14159,3.14159] 
+        }, 
+        {
+            name: "Mayo Squirt",
+            imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/rarepizzas-130-squirt-r0-mayosquirt-v0.png"],
+            sizeVarianceMinMax: [1.0, 1.0],
+            countVarianceMinMax: [1,1],
+            rotationVarianceMinMax: [-3.14159,3.14159] 
+        },          
         {
             name: "Pesto",
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/2100-base-sauce-pesto.png"],
