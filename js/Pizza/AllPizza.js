@@ -349,7 +349,7 @@ function spiralScatter(rand, count, renderObjList, KitchenData) {
     // 
     // choose a rate that angle moves and rate that radius increases
     // TODO: these should be part of scatter method data??
-    var angleVel = randomRangeFloat(rand, .3, 3) * PI / count;
+    var angleVel = randomRangeFloat(rand, -3.0, 3.0) * PI / count;
     var maxRadius = KitchenData.Rules.RADIUS_OF_TOPPINGS_WITHIN_CRUST - renderObjList[0].scale / 2.0;       // max radius will be outer edge of crust minus scale of first element. not exactly correct, but close enough. we will adjust the actual instance in further if necessary.
     var rVel = randomRangeFloat(rand, 1, 2) * maxRadius / count
     var currAngle = randomRangeFloat(rand, 0, TWO_PI);
