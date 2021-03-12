@@ -34,14 +34,14 @@ var KitchenData = {
         // Variant
         {
             name: "Box with waxpaper",
-            imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/rarepizzas-0-box-r1-waxchecker-v0.png"],
+            imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/0500-base-box-redcheckerpaper.png"],
             sizeVarianceMinMax: [1.0, 1.0],
             countVarianceMinMax: [1,1],
             rotationVarianceMinMax: [0,0]
         },
         {
             name: "Box without waxpaper",
-            imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/rarepizzas-0-box-r0-cardboard-v0.png"],
+            imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/0000-base-box-cardboard.png"],
             sizeVarianceMinMax: [1.0, 1.0],
             countVarianceMinMax: [1,1],
             rotationVarianceMinMax: [0,0]
@@ -55,14 +55,21 @@ var KitchenData = {
     Crusts: [
         {
             name: "Thick",
-            imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/rarepizzas-1-crust-r0-thick-v0.png"],
+            imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/1100-base-crust-thick.png"],
             sizeVarianceMinMax: [1.0, 1.0],
             countVarianceMinMax: [1,1],
             rotationVarianceMinMax: [-3.14159,3.14159]
         },
         {
             name: "Thin",
-            imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/rarepizzas-1-crust-r0-thin-v0.png"],
+            imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/1000-base-crust-thin.png"],
+            sizeVarianceMinMax: [1.0, 1.0],
+            countVarianceMinMax: [1,1],
+            rotationVarianceMinMax: [-3.14159,3.14159]
+        }, 
+        {
+            name: "Moon",
+            imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/1200-base-crust-moon.png"],
             sizeVarianceMinMax: [1.0, 1.0],
             countVarianceMinMax: [1,1],
             rotationVarianceMinMax: [-3.14159,3.14159]
@@ -70,33 +77,24 @@ var KitchenData = {
     ],
 
 
-    Sauces: [
-        {
-            name: "Tomato",
-            imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/rarepizzas-120-sauce-r0-tomato-v0.png"],
-            sizeVarianceMinMax: [1.0, 1.0],
-            countVarianceMinMax: [1,1],
-            rotationVarianceMinMax: [-3.14159,3.14159] 
-        },  
-        {
-            name: "BBQ",
-            imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/rarepizzas-2-sauce-r2-bbq-v0.png"                     ],
-            sizeVarianceMinMax: [1.0, 1.0],
-            countVarianceMinMax: [1,1],
-            rotationVarianceMinMax: [-3.14159,3.14159]
-        },
+    Sauces: [ 
         {
             name: "Pesto",
-            imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/rarepizzas-120-sauce-r0-pesto-v0.png",
-            "http://www.oxbone.com/Pizza/Images/Ingredients/rarepizzas-120-sauce-r0-pesto-v1.png"
-                    ],
+            imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/2100-base-sauce-pesto.png"],
             sizeVarianceMinMax: [1.0, 1.0],
             countVarianceMinMax: [1,1],
             rotationVarianceMinMax: [-3.14159,3.14159]
-        },     
+        }, 
         {
-            name: "Mayo Squirt",
-            imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/rarepizzas-130-squirt-r0-mayosquirt-v0.png"],
+            name: "Pixel Pesto",
+            imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/2110-base-sauce-pixelpesto.png"],
+            sizeVarianceMinMax: [1.0, 1.0],
+            countVarianceMinMax: [1,1],
+            rotationVarianceMinMax: [-3.14159,3.14159]
+        },        
+        {
+            name: "Deep Space",
+            imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/2900-base-sauce-deepspace.png"],
             sizeVarianceMinMax: [1.0, 1.0],
             countVarianceMinMax: [1,1],
             rotationVarianceMinMax: [-3.14159,3.14159]
@@ -105,81 +103,162 @@ var KitchenData = {
 
     Cheeses: [
         {
-            name: "Feta Cheese",
-            imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/rarepizzas-3-cheese-r0-feta-v0.png"],
-            sizeVarianceMinMax: [1.0, 1.0],
-            countVarianceMinMax: [1,1],
-            rotationVarianceMinMax: [-3.14159,3.14159]
-        },
-        {
             name: "Mozzarella Cheese",
-            imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/rarepizzas-8-cheese-r0-mozzarella-v1.png"],
+            imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/3000-base-cheese-mozzarella.png"],
             sizeVarianceMinMax: [1.0, 1.0],
             countVarianceMinMax: [1,1],
             rotationVarianceMinMax: [-3.14159,3.14159]
-        },                
+        }, 
+        {
+            name: "Vegan Cheese",
+            imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/3100-base-cheese-vegan.png"],
+            sizeVarianceMinMax: [1.0, 1.0],
+            countVarianceMinMax: [1,1],
+            rotationVarianceMinMax: [-3.14159,3.14159]
+        },                                    
     ],
 
     Toppings: [
-        // TODO: refactor these so that topping contains variant objects, each with different rarities.
         {
-            name: "Turkey Sausage",
-            imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/rarepizzas-115-meat-r1-turkeysausage-v0.png"],
+            name: "Pepperoni",
+            imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/4000-topping-meat-pepperoni.png"],
             sizeVarianceMinMax: [0.1, 0.15],
-            countVarianceMinMax: [10,20],
+            countVarianceMinMax: [50,100],
             rotationVarianceMinMax: [-3.14159,3.14159]
         },
         {
-            name: "Meteorite",
-            imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/rarepizzas-131-misc-r1-meteorite-v1.png"],
-            sizeVarianceMinMax: [0.15, 0.3],
+            name: "Salami",
+            imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/4650-topping-meat-salami.png"],
+            sizeVarianceMinMax: [0.1, 0.15],
+            countVarianceMinMax: [50,100],
+            rotationVarianceMinMax: [-3.14159,3.14159]
+        },
+        {
+            name: "Salami",
+            imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/4660-topping-meat-salami.png"],
+            sizeVarianceMinMax: [0.1, 0.15],
+            countVarianceMinMax: [50,100],
+            rotationVarianceMinMax: [-3.14159,3.14159]
+        },         
+        {
+            name: "Turkey Sausage",
+            imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/4950-topping-meat-turkeysausage.png"],
+            sizeVarianceMinMax: [0.03, 0.08],
+            countVarianceMinMax: [5,12],
+            rotationVarianceMinMax: [-3.14159,3.14159]
+        },
+        {
+            name: "Tomato",
+            imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/5000-topping-fruit-tomato.png"],
+            sizeVarianceMinMax: [0.1, 0.15],
+            countVarianceMinMax: [50,100],
+            rotationVarianceMinMax: [-3.14159,3.14159]
+        }, 
+        {
+            name: "Watermelon",
+            imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/5250-topping-fruit-watermelon.png"],
+            sizeVarianceMinMax: [0.05, 0.1],
+            countVarianceMinMax: [5,10],
+            rotationVarianceMinMax: [-3.14159,3.14159]
+        }, 
+        {
+            name: "Watermelon",
+            imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/5260-topping-fruit-watermelon.png"],
+            sizeVarianceMinMax: [0.05, 0.1],
+            countVarianceMinMax: [5,10],
+            rotationVarianceMinMax: [-3.14159,3.14159]
+        }, 
+        {
+            name: "Watermelon",
+            imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/5270-topping-fruit-watermelon.png"],
+            sizeVarianceMinMax: [0.05, 0.1],
+            countVarianceMinMax: [5,10],
+            rotationVarianceMinMax: [-3.14159,3.14159]
+        }, 
+        {
+            name: "Watermelon",
+            imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/5280-topping-fruit-watermelon.png"],
+            sizeVarianceMinMax: [0.05, 0.1],
+            countVarianceMinMax: [5,10],
+            rotationVarianceMinMax: [-3.14159,3.14159]
+        },
+        {
+            name: "Crickets",
+            imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/6100-topping-bugs-crickets.png"],
+            sizeVarianceMinMax: [0.03, 0.08],
+            countVarianceMinMax: [6,12],
+            rotationVarianceMinMax: [-3.14159,3.14159]
+        },                         
+        {
+            name: "Astronaut",
+            imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/6500-toppings-space-astronaut.png"],
+            sizeVarianceMinMax: [0.05, 0.15],
             countVarianceMinMax: [1,2],
             rotationVarianceMinMax: [-3.14159,3.14159]
         },
         {
-            name: "Star Candy",
-            imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/rarepizzas-128-candy-r0-starcandies-v0.png"],
+            name: "Lunar Landing",
+            imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/6510-toppings-space-lunarlander.png"],
+            sizeVarianceMinMax: [0.05, 0.15],
+            countVarianceMinMax: [1,1],
+            rotationVarianceMinMax: [-3.14159,3.14159]
+        },      
+        {
+            name: "Snap Rocks",
+            imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/6800-topping-candy-snaprocks.png"],
+            sizeVarianceMinMax: [0.05, 0.09],
+            countVarianceMinMax: [1,3],
+            rotationVarianceMinMax: [-3.14159,3.14159]
+        },
+        {
+            name: "Snap Rocks",
+            imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/6801-topping-candy-snaprocks.png"],
+            sizeVarianceMinMax: [0.05, 0.09],
+            countVarianceMinMax: [1,3],
+            rotationVarianceMinMax: [-3.14159,3.14159]
+        },
+        {
+            name: "Snap Rocks",
+            imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/6802-topping-candy-snaprocks.png"],
+            sizeVarianceMinMax: [0.05, 0.09],
+            countVarianceMinMax: [1,3],
+            rotationVarianceMinMax: [-3.14159,3.14159]
+        },
+        {
+            name: "Snap Rocks",
+            imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/6803-topping-candy-snaprocks.png"],
             sizeVarianceMinMax: [0.05, 0.09],
             countVarianceMinMax: [1,3],
             rotationVarianceMinMax: [-3.14159,3.14159]
         },
         {
             name: "Shrimp",
-            imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/rarepizzas-58-seafood-r4-shrimp-v0.png"],
-            sizeVarianceMinMax: [0.09, 0.15],
-            countVarianceMinMax: [10,20],
+            imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/6000-topping-seafood-shrimp.png"],
+            sizeVarianceMinMax: [0.05, 0.1],
+            countVarianceMinMax: [5,10],
             rotationVarianceMinMax: [-0.5, 0.5]
-        },
+        },  
         {
-            name: "Chili Pepper",
-            imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/rarepizzas-67-peppers-r4-chilli-v0.png"],
-            sizeVarianceMinMax: [0.09, 0.15],
-            countVarianceMinMax: [10,20],
-            rotationVarianceMinMax: [-3.14159,3.14159]
-        },   
-        {
-            name: "Pop Rocks",
-            imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/rarepizzas-99-r1-poprocks-v0.png"],
-            sizeVarianceMinMax: [0.2, 0.4],
+            name: "Pop Logo",
+            imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/8100-extra-special-poplogo.png"],
+            sizeVarianceMinMax: [0.1, 0.2],
             countVarianceMinMax: [1,2],
             rotationVarianceMinMax: [-0.3,0.3]
-        },    
+        },   
+        {
+            name: "Pop Logo",
+            imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/8101-extra-special-poplogo.png"],
+            sizeVarianceMinMax: [0.1, 0.2],
+            countVarianceMinMax: [1,2],
+            rotationVarianceMinMax: [-0.3,0.3]
+        },   
         {
             name: "Worm",
-            imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/rarepizzas-24-insect-r3-worm-v0.png"],
-            sizeVarianceMinMax: [0.08, 0.15],
-            countVarianceMinMax: [5, 10],
+            imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/6150-topping-bugs-worms.png"],
+            sizeVarianceMinMax: [0.05, 0.1],
+            countVarianceMinMax: [3, 6],
             rotationVarianceMinMax: [-3.14159,3.14159]
         }, 
-
-        {
-            name: "Rainbow Pepperoni",
-            imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/rarepizzas-158-meat-r3-rainbowpepperoni-v1.png"],
-            sizeVarianceMinMax: [0.08, 0.15],
-            countVarianceMinMax: [5, 10],
-            rotationVarianceMinMax: [-3.14159,3.14159]
-        }, 
-
     ],
 
 }
@@ -448,6 +527,11 @@ function concentricCirclesScatter(rand, count, renderObjList, KitchenData) {
 }
 
 
+function chooseScatterBasedOnRarity(rand, KitchenData) {
+    // HACK for now just return random!
+    return randomRange(rand, 0, KitchenData.ScatterMethods.length - 1);
+}
+
 
 //////////////////////////////////////////////////
 // Display List
@@ -508,7 +592,7 @@ function generateDisplayList(pizza, KitchenData) {
         // and if not adjust them or choose another scatter. all that should probably be done in the make function
         // TODO: get this from pizza dna for this topping, or for now randomly choose it? 
         // TODO: should be based on rarity of scatter
-        var scatterIndex = randomRange(pizza.rand, 0, KitchenData.ScatterMethods.length - 1);
+        var scatterIndex = chooseScatterBasedOnRarity(pizza.rand, KitchenData); 
         var scatter = KitchenData.ScatterMethods[scatterIndex].method;
 
         var toppingRenderObjs = [];
