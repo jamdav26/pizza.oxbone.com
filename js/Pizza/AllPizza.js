@@ -25,7 +25,8 @@ var KitchenData = {
         {name: "Random", rarity: 0, method: randomScatter},
         {name: "Spiral", rarity: 0, method: spiralScatter},
         {name: "Smiley", rarity: 4, method: smileyScatter},  
-        {name: "Spokes", rarity: 0, method: spokesScatter},            
+        {name: "Spokes", rarity: 0, method: spokesScatter},     
+        {name: "Concentric Circles", rarity: 0, method: concentricCirclesScatter},                
     ],
 
     // TODO: refactor these so that boxes crusts, sauces, cheeses contains variant objects, each with different rarities.
@@ -371,6 +372,67 @@ function spokesScatter(rand, count, renderObjList, KitchenData) {
             {
                 // choose angle
                var angle = angStart + iSpoke * angInc;
+
+                // calculate point
+                var x = len * Math.cos(angle);
+                var y = len * Math.sin(angle);
+                ret.push([x,y]);
+                iCount++;         
+            }
+        }   
+
+    }
+    return ret;
+
+}
+
+function concentricCirclesScatter(rand, count, renderObjList, KitchenData) {
+    var ret = [];
+
+    // calculate number of circles
+    // calculate number of points per circle
+    const MIN_POINTS_PER_CIRCLE = 3;
+    const MAX_POINTS_PER_CIRCLE = 6;
+    var maxPerCircle = randomRange(rand, MIN_POINTS_PER_CIRCLE, MAX_POINTS_PER_CIRCLE);
+    var numCircles = 2;
+    var numPointsPerCircle = Math.floor(count / numCircles);
+    while (numPointsPerCircle > maxPerCircle)
+    {
+        numCircles++;
+        numPointsPerCircle = Math.floor(count / numCircles);
+    }
+
+    // now calculate the excess (how many more we have than we will scatter on the circles)
+    var extra = count - (numCircles * numPointsPerCircle);
+
+
+    var iCount = 0;
+    // HACK: for now put extras in the middle, but later may want to randomize it
+    for  (var iExtra = 0; iExtra < extra; iExtra++)
+    {
+        ret.push([0,0]);
+        iCount++;
+    }
+
+    // if count > 0
+    if (numCircles * numPointsPerCircle > extra)
+    { 
+        // for each circle
+        var rInc = (KitchenData.Rules.RADIUS_OF_TOPPINGS_WITHIN_CRUST) / numCircles;
+        var angInc = TWO_PI / numPointsPerCircle;
+        var angStart = randomRange(rand, 0, PI);
+        for (var iCircle = 0; iCircle < numCircles; iCircle++)
+        {
+            var len = (iCircle + 1) * rInc;
+            angStart += iCircle * angInc / numCircles;  // stagger the concentric circles a little, otherwise would look like spokess
+            // adjust len so obj fits inside the play area
+            len = Math.min(len, KitchenData.Rules.RADIUS_OF_TOPPINGS_WITHIN_CRUST - renderObjList[iCount].scale / 2.0);
+        
+            // for each point on a circle
+            for (var iPoint = 0; iPoint < numPointsPerCircle; iPoint++)
+            {
+                // choose angle
+               var angle = angStart + iPoint * angInc;
 
                 // calculate point
                 var x = len * Math.cos(angle);
