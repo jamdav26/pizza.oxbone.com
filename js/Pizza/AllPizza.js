@@ -350,7 +350,8 @@ function spiralScatter(rand, count, renderObjList, KitchenData) {
     // choose a rate that angle moves and rate that radius increases
     // TODO: these should be part of scatter method data??
     var angleVel = randomRangeFloat(rand, .3, 3) * PI / count;
-    var rVel = randomRangeFloat(rand, 1, 2) * KitchenData.Rules.RADIUS_OF_TOPPINGS_WITHIN_CRUST / count
+    var maxRadius = KitchenData.Rules.RADIUS_OF_TOPPINGS_WITHIN_CRUST - renderObjList[0].scale / 2.0;       // max radius will be outer edge of crust minus scale of first element. not exactly correct, but close enough. we will adjust the actual instance in further if necessary.
+    var rVel = randomRangeFloat(rand, 1, 2) * maxRadius / count
     var currAngle = randomRangeFloat(rand, 0, TWO_PI);
     var currR = 0;
     var ret = [];
@@ -450,7 +451,9 @@ function spokesScatter(rand, count, renderObjList, KitchenData) {
     if (numSpokes * numPointsPerSpoke > extra)
     { 
         // for each point on a spoke
-        var rInc = (KitchenData.Rules.RADIUS_OF_TOPPINGS_WITHIN_CRUST) / numPointsPerSpoke;
+        var maxRadius = KitchenData.Rules.RADIUS_OF_TOPPINGS_WITHIN_CRUST - renderObjList[0].scale / 2.0;       // max radius will be outer edge of crust minus scale of first element. not exactly correct, but close enough. we will adjust the actual instance in further if necessary.
+  
+        var rInc = maxRadius / numPointsPerSpoke;
         var angInc = TWO_PI / numSpokes;
         var angStart = randomRange(rand, 0, PI);
         for (var iPoint = 0; iPoint < numPointsPerSpoke; iPoint++)
@@ -511,7 +514,9 @@ function concentricCirclesScatter(rand, count, renderObjList, KitchenData) {
     if (numCircles * numPointsPerCircle > extra)
     { 
         // for each circle
-        var rInc = (KitchenData.Rules.RADIUS_OF_TOPPINGS_WITHIN_CRUST) / numCircles;
+        var maxRadius = KitchenData.Rules.RADIUS_OF_TOPPINGS_WITHIN_CRUST - renderObjList[0].scale / 2.0;       // max radius will be outer edge of crust minus scale of first element. not exactly correct, but close enough. we will adjust the actual instance in further if necessary.
+
+        var rInc = maxRadius / numCircles;
         var angInc = TWO_PI / numPointsPerCircle;
         var angStart = randomRange(rand, 0, PI);
         for (var iCircle = 0; iCircle < numCircles; iCircle++)
