@@ -22,10 +22,10 @@ var KitchenData = {
 
     // TODO: we can't JSONIFY the methods like this, so need to figure something else out.
     ScatterMethods: [
-        {name: "Random", rarity: 0, method: randomScatter},
-        {name: "Spiral", rarity: 0, method: spiralScatter},
+        {name: "Random", rarity: 2, method: randomScatter},
+        {name: "Spiral", rarity: 3, method: spiralScatter},
         {name: "Smiley", rarity: 4, method: smileyScatter},  
-        {name: "Spokes", rarity: 0, method: spokesScatter},     
+        {name: "Spokes", rarity: 3, method: spokesScatter},     
         {name: "Concentric Circles", rarity: 0, method: concentricCirclesScatter},                
     ],
 
@@ -256,8 +256,8 @@ function spiralScatter(rand, count, renderObjList, KitchenData) {
     // 
     // choose a rate that angle moves and rate that radius increases
     // TODO: these should be part of scatter method data??
-    var angleVel = 3 * PI / count;
-    var rVel = KitchenData.Rules.RADIUS_OF_TOPPINGS_WITHIN_CRUST / count;
+    var angleVel = randomRangeFloat(rand, .3, 3) * PI / count;
+    var rVel = randomRangeFloat(rand, 1, 2) * KitchenData.Rules.RADIUS_OF_TOPPINGS_WITHIN_CRUST / count
     var currAngle = randomRangeFloat(rand, 0, TWO_PI);
     var currR = 0;
     var ret = [];
