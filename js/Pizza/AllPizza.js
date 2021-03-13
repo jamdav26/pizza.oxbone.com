@@ -18,15 +18,24 @@ var KitchenData = {
         RADIUS_OF_TOPPINGS_WITHIN_CRUST: 0.4,       // TODO: get this from Anthony/art specs
     },
 
-    RarityLevels: ["Common", "R2", "Rare", "R4", "Super Rare"],
+    RarityLevels: [
+        {name: "Common", chance: 1},
+        {name: "Less Common", chance: 0.5}, 
+        {name: "Rare", chance: 0.25},    
+        {name: "Very Rare", chance: 0.1}, 
+        {name: "Super Rare", chance: 0.05},                  
+    ],
+    
+    //["Common", "R2", "Rare", "Super Rare", "Extremely"],
 
-    // TODO: we can't JSONIFY the methods like this, so need to figure something else out.
+    // Brittle: the name field here must match exactly to the runtime scatterTable data.
+    // at pizza make time the chosen scatter here is used to look into that table for the correct scatter method.
     ScatterMethods: [
-        {name: "Random", rarity: 2, method: randomScatter},
-        {name: "Spiral", rarity: 3, method: spiralScatter},
-        {name: "Smiley", rarity: 4, method: smileyScatter},  
-        {name: "Spokes", rarity: 3, method: spokesScatter},     
-        {name: "Concentric Circles", rarity: 0, method: concentricCirclesScatter},                
+        {name: "Random", rarityLevel: 0},
+        {name: "Spiral", rarityLevel: 3},
+        {name: "Smiley", rarityLevel: 4},  
+        {name: "Spokes", rarityLevel: 2},     
+        {name: "Concentric Circles", rarityLevel: 1},                
     ],
 
     // TODO: refactor these so that boxes crusts, sauces, cheeses contains variant objects, each with different rarities.
@@ -34,6 +43,7 @@ var KitchenData = {
         // Variant
         {
             name: "Box with waxpaper",
+            rarityLevel: 3,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/0500-base-box-redcheckerpaper.png"],
             sizeMinMax: [1.0, 1.0],
             countMinMax: [1,1],
@@ -41,6 +51,7 @@ var KitchenData = {
         },
         {
             name: "Box without waxpaper",
+            rarityLevel: 0,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/0000-base-box-cardboard.png"],
             sizeMinMax: [1.0, 1.0],
             countMinMax: [1,1],
@@ -55,6 +66,7 @@ var KitchenData = {
     Crusts: [
         {
             name: "Thick",
+            rarityLevel: 0,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/1100-base-crust-thick.png"],
             sizeMinMax: [1.0, 1.0],
             countMinMax: [1,1],
@@ -62,6 +74,7 @@ var KitchenData = {
         },
         {
             name: "Thin",
+            rarityLevel: 0,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/1000-base-crust-thin.png"],
             sizeMinMax: [1.0, 1.0],
             countMinMax: [1,1],
@@ -73,6 +86,7 @@ var KitchenData = {
     Sauces: [ 
         {
             name: "Tomato",
+            rarityLevel: 0,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/rarepizzas-120-sauce-r0-tomato-v0.png"],
             sizeMinMax: [1.0, 1.0],
             countMinMax: [1,1],
@@ -80,6 +94,7 @@ var KitchenData = {
         }, 
         {
             name: "BBQ",
+            rarityLevel: 1,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/rarepizzas-2-sauce-r2-bbq-v0.png"],
             sizeMinMax: [1.0, 1.0],
             countMinMax: [1,1],
@@ -87,6 +102,7 @@ var KitchenData = {
         }, 
         {
             name: "Mayo Squirt",
+            rarityLevel: 2,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/rarepizzas-130-squirt-r0-mayosquirt-v0.png"],
             sizeMinMax: [1.0, 1.0],
             countMinMax: [1,1],
@@ -94,6 +110,7 @@ var KitchenData = {
         },          
         {
             name: "Pesto",
+            rarityLevel: 2,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/2100-base-sauce-pesto.png"],
             sizeMinMax: [1.0, 1.0],
             countMinMax: [1,1],
@@ -101,6 +118,7 @@ var KitchenData = {
         }, 
         {
             name: "Pixel Pesto",
+            rarityLevel: 3,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/2110-base-sauce-pixelpesto.png"],
             sizeMinMax: [1.0, 1.0],
             countMinMax: [1,1],
@@ -108,6 +126,7 @@ var KitchenData = {
         },        
         {
             name: "Deep Space",
+            rarityLevel: 4,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/2900-base-sauce-deepspace.png"],
             sizeMinMax: [1.0, 1.0],
             countMinMax: [1,1],
@@ -118,6 +137,7 @@ var KitchenData = {
     Cheeses: [
         {
             name: "Mozzarella",
+            rarityLevel: 0,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/3000-base-cheese-mozzarella.png"],
             sizeMinMax: [1.0, 1.0],
             countMinMax: [1,1],
@@ -125,6 +145,7 @@ var KitchenData = {
         }, 
         {
             name: "Vegan",
+            rarityLevel: 2,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/3100-base-cheese-vegan.png"],
             sizeMinMax: [1.0, 1.0],
             countMinMax: [1,1],
@@ -135,6 +156,7 @@ var KitchenData = {
     Toppings: [
         {
             name: "Pepperoni",
+            rarityLevel: 0,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/4000-topping-meat-pepperoni.png"],
             sizeMinMax: [0.1, 0.15],
             countMinMax: [50,100],
@@ -142,13 +164,15 @@ var KitchenData = {
         },
         {
             name: "Salami",
+            rarityLevel: 0,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/4650-topping-meat-salami.png"],
             sizeMinMax: [0.1, 0.15],
             countMinMax: [50,100],
             rotationMinMax: [-3.14159,3.14159]
         },
         {
-            name: "Salami",
+            name: "Special Salami",
+            rarityLevel: 0,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/4660-topping-meat-salami.png"],
             sizeMinMax: [0.1, 0.15],
             countMinMax: [50,100],
@@ -156,6 +180,7 @@ var KitchenData = {
         },         
         {
             name: "Turkey Sausage",
+            rarityLevel: 1,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/4950-topping-meat-turkeysausage.png"],
             sizeMinMax: [0.03, 0.08],
             countMinMax: [5,12],
@@ -163,6 +188,7 @@ var KitchenData = {
         },
         {
             name: "Tomato",
+            rarityLevel: 0,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/5000-topping-fruit-tomato.png"],
             sizeMinMax: [0.1, 0.15],
             countMinMax: [50,100],
@@ -170,13 +196,15 @@ var KitchenData = {
         }, 
         {
             name: "Watermelon",
+            rarityLevel: 4,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/5250-topping-fruit-watermelon.png"],
             sizeMinMax: [0.05, 0.1],
             countMinMax: [5,10],
             rotationMinMax: [-3.14159,3.14159]
         }, 
         {
-            name: "Watermelon",
+            name: "Special Watermelon",
+            rarityLevel: 3,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/5260-topping-fruit-watermelon.png"],
             sizeMinMax: [0.05, 0.1],
             countMinMax: [5,10],
@@ -184,6 +212,7 @@ var KitchenData = {
         }, 
         {
             name: "Watermelon",
+            rarityLevel: 3,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/5270-topping-fruit-watermelon.png"],
             sizeMinMax: [0.05, 0.1],
             countMinMax: [5,10],
@@ -191,6 +220,7 @@ var KitchenData = {
         }, 
         {
             name: "Watermelon",
+            rarityLevel: 2,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/5280-topping-fruit-watermelon.png"],
             sizeMinMax: [0.05, 0.1],
             countMinMax: [5,10],
@@ -198,6 +228,7 @@ var KitchenData = {
         },
         {
             name: "Crickets",
+            rarityLevel: 4,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/6100-topping-bugs-crickets.png"],
             sizeMinMax: [0.03, 0.08],
             countMinMax: [6,12],
@@ -205,6 +236,7 @@ var KitchenData = {
         },                         
         {
             name: "Astronaut",
+            rarityLevel: 4,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/6500-toppings-space-astronaut.png"],
             sizeMinMax: [0.05, 0.15],
             countMinMax: [1,2],
@@ -212,6 +244,7 @@ var KitchenData = {
         },
         {
             name: "Lunar Landing",
+            rarityLevel: 3,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/6510-toppings-space-lunarlander.png"],
             sizeMinMax: [0.05, 0.15],
             countMinMax: [1,1],
@@ -219,6 +252,7 @@ var KitchenData = {
         },      
         {
             name: "Snap Rocks",
+            rarityLevel: 3,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/6800-topping-candy-snaprocks.png"],
             sizeMinMax: [0.05, 0.09],
             countMinMax: [1,3],
@@ -226,6 +260,7 @@ var KitchenData = {
         },
         {
             name: "Snap Rocks",
+            rarityLevel: 4,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/6801-topping-candy-snaprocks.png"],
             sizeMinMax: [0.05, 0.09],
             countMinMax: [1,3],
@@ -233,6 +268,7 @@ var KitchenData = {
         },
         {
             name: "Snap Rocks",
+            rarityLevel: 3,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/6802-topping-candy-snaprocks.png"],
             sizeMinMax: [0.05, 0.09],
             countMinMax: [1,3],
@@ -240,6 +276,7 @@ var KitchenData = {
         },
         {
             name: "Snap Rocks",
+            rarityLevel: 3,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/6803-topping-candy-snaprocks.png"],
             sizeMinMax: [0.05, 0.09],
             countMinMax: [1,3],
@@ -247,6 +284,7 @@ var KitchenData = {
         },
         {
             name: "Shrimp",
+            rarityLevel: 1,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/6000-topping-seafood-shrimp.png"],
             sizeMinMax: [0.05, 0.1],
             countMinMax: [5,10],
@@ -254,6 +292,7 @@ var KitchenData = {
         },  
         {
             name: "Pop Logo",
+            rarityLevel: 1,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/8100-extra-special-poplogo.png"],
             sizeMinMax: [0.1, 0.2],
             countMinMax: [1,2],
@@ -261,6 +300,7 @@ var KitchenData = {
         },   
         {
             name: "Pop Logo",
+            rarityLevel: 2,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/8101-extra-special-poplogo.png"],
             sizeMinMax: [0.1, 0.2],
             countMinMax: [1,2],
@@ -268,6 +308,7 @@ var KitchenData = {
         },   
         {
             name: "Worm",
+            rarityLevel: 3,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/6150-topping-bugs-worms.png"],
             sizeMinMax: [0.05, 0.1],
             countMinMax: [3, 6],
@@ -332,6 +373,17 @@ function randomPointOnDisk(rand, centerX, centerY, radius)
 /////////////////////////////////////////////////////////////////
 // Scatters
 /////////////////////////////////////////////////////////////////
+
+// Scatter methods table
+// could make a ScatterFactory, and each scatter a derived Scatter class, then
+// keep track if it all that way. Better design. TODO for later.
+var scatterTable = {
+    "Random": randomScatter,
+    "Spiral": spiralScatter,   
+    "Smiley": smileyScatter,
+    "Spokes": spokesScatter,    
+    "Concentric Circles": concentricCirclesScatter  
+};
 
 function randomScatter(rand, count, renderObjList, KitchenData) {
     var ret = [];
@@ -548,6 +600,7 @@ function concentricCirclesScatter(rand, count, renderObjList, KitchenData) {
 
 function chooseScatterBasedOnRarity(rand, KitchenData) {
     // HACK for now just return random!
+    // TODO: bucketize it, roll dice, choose from scatters in the chosen bucket
     return randomRange(rand, 0, KitchenData.ScatterMethods.length - 1);
 }
 
@@ -616,7 +669,7 @@ function generateDisplayList(pizza, KitchenData) {
         // TODO: get this from pizza dna for this topping, or for now randomly choose it? 
         // TODO: should be based on rarity of scatter
         var scatterIndex = chooseScatterBasedOnRarity(pizza.rand, KitchenData); 
-        var scatter = KitchenData.ScatterMethods[scatterIndex].method;
+        var scatter = scatterTable[KitchenData.ScatterMethods[scatterIndex].name];
 
         var toppingRenderObjs = [];
         for (var iCount = 0; iCount < toppingCount; iCount++)
