@@ -585,16 +585,18 @@ function generateDisplayList(pizza, KitchenData) {
     for (var i = 0; i < pizza.sauceIndices.length; i++)
     {
         renderObj = {};
-        var sauce = KitchenData.Sauces[i];
+        var sauceIndex = pizza.sauceIndices[i];     
+        var sauce = KitchenData.Sauces[sauceIndex];
         renderObj = createAndAppendRenderObjFromVariant(pizza.rand, sauce, displayBundle, textureToIndexMap); 
         displayBundle.displayList.push(renderObj);
     }  
     
     // cheese
     for (var i = 0; i < pizza.cheeseIndices.length; i++)
-    {
+    {  
         renderObj = {};
-        var cheese = KitchenData.Cheeses[i];
+        var cheeseIndex = pizza.cheeseIndices[i];
+        var cheese = KitchenData.Cheeses[cheeseIndex];
         renderObj = createAndAppendRenderObjFromVariant(pizza.rand, cheese, displayBundle, textureToIndexMap); 
         displayBundle.displayList.push(renderObj);
     }  
