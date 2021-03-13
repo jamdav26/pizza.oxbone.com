@@ -117,14 +117,14 @@ var KitchenData = {
 
     Cheeses: [
         {
-            name: "Mozzarella Cheese",
+            name: "Mozzarella",
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/3000-base-cheese-mozzarella.png"],
             sizeMinMax: [1.0, 1.0],
             countMinMax: [1,1],
             rotationMinMax: [-3.14159,3.14159]
         }, 
         {
-            name: "Vegan Cheese",
+            name: "Vegan",
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/3100-base-cheese-vegan.png"],
             sizeMinMax: [1.0, 1.0],
             countMinMax: [1,1],
@@ -1097,6 +1097,31 @@ Pizza.prototype.calculateDNA = function() {
     return dna;
 */  
 }
+
+
+Pizza.prototype.generateIngredientsData = function(KitchenData) {
+    var ingredientsData = {};
+    ingredientsData.box = {name: KitchenData.Boxes[this.boxIndex].name};
+    ingredientsData.crust = {name: KitchenData.Crusts[this.crustIndex].name}; 
+    ingredientsData.sauces = [];
+    for (var iSauce = 0; iSauce < this.sauceIndices.length; iSauce++) {
+        var sauce = KitchenData.Sauces[this.sauceIndices[iSauce]];
+        ingredientsData.sauces.push({name: sauce.name});
+    } 
+    ingredientsData.cheeses = [];
+    for (var iCheese = 0; iCheese < this.cheeseIndices.length; iCheese++) {
+        var cheese = KitchenData.Cheeses[this.cheeseIndices[iCheese]];
+        ingredientsData.cheeses.push({name: cheese.name});
+    } 
+    ingredientsData.toppings = [];
+    for (var iTopping = 0; iTopping < this.toppingIndices.length; iTopping++) {
+        var topping = KitchenData.Toppings[this.toppingIndices[iTopping]];
+        ingredientsData.toppings.push({name: topping.name});
+    }  
+    
+    return ingredientsData;
+}
+
 
 
 ///////////////////////////////////////////////////

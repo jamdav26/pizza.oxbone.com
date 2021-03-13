@@ -38,6 +38,9 @@ http.createServer(function(request, response) {
 
       // generate display list
       ret.displayBundle = generateDisplayList(pizza, KitchenData);
+
+      // generate marketing data
+      ret.ingredientsData = pizza.generateIngredientsData(KitchenData);
     }
 
     // output json
