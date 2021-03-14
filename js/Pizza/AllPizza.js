@@ -22,8 +22,8 @@ var KitchenData = {
         {name: "Common", chance: 1},
         {name: "Less Common", chance: 0.5}, 
         {name: "Rare", chance: 0.25},    
-        {name: "Very Rare", chance: 0.1}, 
-        {name: "Super Rare", chance: 0.05},                  
+        {name: "Very Rare", chance: 0.125}, 
+        {name: "Super Rare", chance: 0.06125},                  
     ],
     
     //["Common", "R2", "Rare", "Super Rare", "Extremely"],
@@ -318,6 +318,94 @@ var KitchenData = {
 
 }
 
+
+// Function to choose X objects from an array of objects, each with a rarityLevel field.
+// return a list of the indices into the input array.
+function choose(arr, count, RarityLevels) {
+    var choices = [];
+
+    // first, bucketize all the possibilities and calculate the bucket probability.
+    // each bucket R0-R4 have a base probability. We will start with 1 / 2^n where n is 0...4.
+    // THOUGH we may want to change to 1/3^n). 
+    // but the base probability needs to be adjusted by the num of elements in that bucket 
+    // divided by the number of elements in R0.
+    // For ex.if there is 2 elems in R0 and 1 in R1, then there is equal probability that
+    // an item in R0 or R1 is chosen. That's not what we want. What we want is for an element
+    // in R1 to have 1/2 the probability of an element in R0. So we multiply the base bucket 
+    //probability by the count in the bucket divided by the count in R0.
+
+    // first, bucketize
+    // TODO: is it necessary to ensure the buckets are in decreasing probability?
+    //  
+    var buckets = [];
+    var totalProbability = 0.0;
+    for (var i = 0; i < RarityLevels.length; i++) {
+        var bucket = {};      
+        bucket.items = [];   // maybe a list is better since we will be removing items from it while we choose.
+        bucket.probability = RarityLevels[i].probability; // this will be adjusted once all buckets are filled.
+        totalProbability += bucket.probability;
+        buckets.push(bucket);
+    }
+
+    // normalize probabilities so they add to 1.0
+    for (var i = 0; i < buckets.length; i++) {
+        buckets[i].probability = buckets[i].probability / totalProbability;
+    }    
+
+    // now bucketize!
+    for (var i = 0; i < arr.length; i++) {
+        var item = arr[i];
+        var rarityLevel = 0;
+        //sanity check
+        if (item.rarityLevel == undefined)
+            console.log(item.name + " needs a rarity level! Assume its R0.");
+        else
+            rarityLevel = item.rarityLevel;
+        if (rarityLevel < 0 )
+        {
+            console.log(item.name + " rarity level < 0! Assume its R0.");
+            rarityLevel = 0;           
+        }
+        else
+        if (rarityLevel >= buckets.length)
+        {
+            console.log(item.name + " rarity level > max level! Assume its max.");
+            rarityLevel = buckets.length - 1;           
+        }
+
+        // add to bucket
+        buckets[rarityLevel].items.push(item);
+    }
+
+    // now all items are bucketized, so we need to go back and adjust the bucket probabilities
+    // to account for the counts in each relative to first bucket
+    var countInBucket0 = buckets[0].items.length;
+    var probablityOfBucket0 = buckets[0].probability;
+    for (var i = 1; i < buckets.length; i++) {
+        var countInBucket = buckets[i].items.length;
+        if (countInBucket > 0)
+        {
+            buckets[i].probability = buckets[i].probability * probablityOfBucket0 * (countInBucket / countInBucket0);
+            buckets[i].probabilityOfItemInBucket = buckets[i].probability / countInBucket;
+        }
+        else
+            buckets[i].probability = 0.0;
+    }   
+
+
+    // whew!! we are done building our data structure for choosing items.
+    // I guess we should actually choose them then!
+    for (var i = 0; i < count; i++) {
+        var rollTheDice = randomRangeFloat(rand, 0.0, 1.0);
+
+        // find which bucket this resides in....
+
+        // TODO: we might want to save off the probablity of this item 
+        // for description, etc.
+
+    }
+
+}
 
 //////////////////////////////////////
 // The Rand function
