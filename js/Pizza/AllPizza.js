@@ -607,6 +607,34 @@ Bitfield.prototype.getOnBits = function()
     return onBits;
 }
 
+// HACK function. Should probably go with KitchenData, since that's where the probability values are cooked.
+function KITCHEN_chooseItem(items, diceRoll) {
+    // binary search the items list
+    var lo = 0;
+    var hi = items.length - 1;
+
+    console.log(items);
+    console.log(diceRoll);
+    while (lo <= hi) {
+        console.log("lo = " + lo + " and hi = " + hi);
+        var mid = Math.floor(lo + (hi - lo) / 2);
+        if (diceRoll == items[mid].probabilityTier)
+            return mid;
+        else
+        if (diceRoll > items[mid].probabilityTier)
+            lo = mid + 1;  
+        else
+        {
+            if (lo == mid)
+                return mid;
+            else
+                hi = mid;    
+        }    
+    }
+    return hi;
+}
+
+
 
 //////////////////////////////////////////
 // Pizza
@@ -623,40 +651,31 @@ Pizza.prototype.makeRandom = function(overrides, KitchenData)
     // rand on the other side when a pizza is created from the same seed
     var localRand = mulberry32(Date.now() - 100);
 
-    // randomly choose box
+    // choose box
     this.boxMask = new Bitfield("00");
-    this.boxMask.setBit(randomRange(localRand, 0, KitchenData.Boxes.length - 1), 1);
-  //  this.boxIndex = randomRange(localRand, 0, KitchenData.Boxes.length - 1);
-
+    var index = KITCHEN_chooseItem(KitchenData.Boxes, randomRangeFloat(localRand, 0.0, 1.0));
+    this.boxMask.setBit(index, 1);  
 
     // TODO: paper underlayment?
     this.paperMask = new Bitfield("00");
 
     // randomly choose crust
     this.crustMask = new Bitfield("00");
-    this.crustMask.setBit(randomRange(localRand, 0, KitchenData.Crusts.length - 1), 1);
-    //this.crustIndex = randomRange(localRand, 0, KitchenData.Crusts.length - 1);
+    index = KITCHEN_chooseItem(KitchenData.Crusts, randomRangeFloat(localRand, 0.0, 1.0));
+    this.crustMask.setBit(index, 1);
 
     // randomly choose sauce
-    // TODO: take into account rarity, etc.
-    //this.sauceIndices = [];
     this.sauceMask = new Bitfield("00");
-    var numSauces = randomRange(localRand, 0, KitchenData.Sauces.length);
-    for (var iSauce = 0; iSauce < numSauces; iSauce++)
-    {
-        //this.sauceIndices.push(randomRange(localRand, 0, KitchenData.Sauces.length - 1));
-        this.sauceMask.setBit(randomRange(localRand, 0, KitchenData.Sauces.length - 1), 1);
-    }
+    index = KITCHEN_chooseItem(KitchenData.Sauces, randomRangeFloat(localRand, 0.0, 1.0));
+    this.sauceMask.setBit(index, 1);
 
-    // randomly choose cheese
-    // TODO: take into account rarity, etc.
-    //this.cheeseIndices = [];
+    // randomly choose cheeses
     this.cheeseMask = new Bitfield("00");
     var numCheeses = randomRange(localRand, 0, KitchenData.Cheeses.length);
     for (var iCheese = 0; iCheese < numCheeses; iCheese++)
     {
-        //this.cheeseIndices.push(randomRange(localRand, 0, KitchenData.Cheeses.length - 1));
-        this.cheeseMask.setBit(randomRange(localRand, 0, KitchenData.Cheeses.length - 1), 1);
+        index = KITCHEN_chooseItem(KitchenData.Cheeses, randomRangeFloat(localRand, 0.0, 1.0));
+        this.cheeseMask.setBit(index, 1);
     }
 
     // randomly choose toppings
@@ -667,8 +686,8 @@ Pizza.prototype.makeRandom = function(overrides, KitchenData)
     var numToppings = randomRange(localRand, 0, KitchenData.Toppings.length);
     for (var iTopping = 0; iTopping < numToppings; iTopping++)
     {
-        //this.toppingIndices.push(randomRange(localRand, 0, KitchenData.Toppings.length - 1));
-        this.toppingMask.setBit(randomRange(localRand, 0, KitchenData.Toppings.length - 1), 1);
+        index = KITCHEN_chooseItem(KitchenData.Toppings, randomRangeFloat(localRand, 0.0, 1.0));
+        this.toppingMask.setBit(index, 1); 
     }
 
     // choose and seed random generator
@@ -748,8 +767,6 @@ Pizza.prototype.makeFromDna = function(dna)
     // if we got this far then it's a valid dna, so assign it
     this.dna = dna;
 }
-
-
 
 // HACK for now set derivative values
 Pizza.prototype.HACK_setDerivativeValues = function() {
