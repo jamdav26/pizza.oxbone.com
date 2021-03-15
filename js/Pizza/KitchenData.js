@@ -155,7 +155,7 @@ var KitchenData = {
         },
         {
             name: "Special Salami",
-            rarityLevel: 1,
+            rarityLevel: 3,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/4660-topping-meat-salami.png"],
             sizeMinMax: [0.2, 0.25],
             countMinMax: [50,100],
@@ -275,7 +275,7 @@ var KitchenData = {
         },  
         {
             name: "Pop Logo",
-            rarityLevel: 2,
+            rarityLevel: 4,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/8100-extra-special-poplogo.png"],
             sizeMinMax: [0.1, 0.2],
             countMinMax: [1,2],
@@ -283,7 +283,7 @@ var KitchenData = {
         },   
         {
             name: "Pop Logo",
-            rarityLevel: 3,
+            rarityLevel: 5,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/8101-extra-special-poplogo.png"],
             sizeMinMax: [0.1, 0.2],
             countMinMax: [1,2],
