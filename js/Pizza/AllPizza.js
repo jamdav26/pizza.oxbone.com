@@ -17,25 +17,17 @@ var KitchenData = {
         MAX_CHEESES_PER_PIZZA: 1,
         RADIUS_OF_TOPPINGS_WITHIN_CRUST: 0.4,       // TODO: get this from Anthony/art specs
     },
-
-    RarityLevels: [
-        {name: "Common", chance: 1},
-        {name: "Less Common", chance: 0.5}, 
-        {name: "Rare", chance: 0.25},    
-        {name: "Very Rare", chance: 0.125}, 
-        {name: "Super Rare", chance: 0.06125},                  
-    ],
-    
+ 
     //["Common", "R2", "Rare", "Super Rare", "Extremely"],
 
     // Brittle: the name field here must match exactly to the runtime scatterTable data.
     // at pizza make time the chosen scatter here is used to look into that table for the correct scatter method.
     ScatterMethods: [
-        {name: "Random", rarityLevel: 0},
-        {name: "Spiral", rarityLevel: 3},
-        {name: "Smiley", rarityLevel: 4},  
-        {name: "Spokes", rarityLevel: 2},     
-        {name: "Concentric Circles", rarityLevel: 1},                
+        {name: "Random", rarityLevel: 1},
+        {name: "Spiral", rarityLevel: 4},
+        {name: "Smiley", rarityLevel: 5},  
+        {name: "Spokes", rarityLevel: 3},     
+        {name: "Concentric Circles", rarityLevel: 2},                
     ],
 
     // TODO: refactor these so that boxes crusts, sauces, cheeses contains variant objects, each with different rarities.
@@ -43,7 +35,7 @@ var KitchenData = {
         // Variant
         {
             name: "Box with waxpaper",
-            rarityLevel: 3,
+            rarityLevel: 4,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/0500-base-box-redcheckerpaper.png"],
             sizeMinMax: [1.0, 1.0],
             countMinMax: [1,1],
@@ -51,7 +43,7 @@ var KitchenData = {
         },
         {
             name: "Box without waxpaper",
-            rarityLevel: 0,
+            rarityLevel: 1,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/0000-base-box-cardboard.png"],
             sizeMinMax: [1.0, 1.0],
             countMinMax: [1,1],
@@ -66,7 +58,7 @@ var KitchenData = {
     Crusts: [
         {
             name: "Thick",
-            rarityLevel: 0,
+            rarityLevel: 1,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/1100-base-crust-thick.png"],
             sizeMinMax: [1.0, 1.0],
             countMinMax: [1,1],
@@ -74,7 +66,7 @@ var KitchenData = {
         },
         {
             name: "Thin",
-            rarityLevel: 0,
+            rarityLevel: 1,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/1000-base-crust-thin.png"],
             sizeMinMax: [1.0, 1.0],
             countMinMax: [1,1],
@@ -86,7 +78,7 @@ var KitchenData = {
     Sauces: [ 
         {
             name: "Tomato",
-            rarityLevel: 0,
+            rarityLevel: 1,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/rarepizzas-120-sauce-r0-tomato-v0.png"],
             sizeMinMax: [1.0, 1.0],
             countMinMax: [1,1],
@@ -94,7 +86,7 @@ var KitchenData = {
         }, 
         {
             name: "BBQ",
-            rarityLevel: 1,
+            rarityLevel: 2,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/rarepizzas-2-sauce-r2-bbq-v0.png"],
             sizeMinMax: [1.0, 1.0],
             countMinMax: [1,1],
@@ -102,7 +94,7 @@ var KitchenData = {
         }, 
         {
             name: "Mayo Squirt",
-            rarityLevel: 2,
+            rarityLevel: 3,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/rarepizzas-130-squirt-r0-mayosquirt-v0.png"],
             sizeMinMax: [1.0, 1.0],
             countMinMax: [1,1],
@@ -110,7 +102,7 @@ var KitchenData = {
         },          
         {
             name: "Pesto",
-            rarityLevel: 2,
+            rarityLevel: 3,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/2100-base-sauce-pesto.png"],
             sizeMinMax: [1.0, 1.0],
             countMinMax: [1,1],
@@ -118,7 +110,7 @@ var KitchenData = {
         }, 
         {
             name: "Pixel Pesto",
-            rarityLevel: 3,
+            rarityLevel: 4,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/2110-base-sauce-pixelpesto.png"],
             sizeMinMax: [1.0, 1.0],
             countMinMax: [1,1],
@@ -126,7 +118,7 @@ var KitchenData = {
         },        
         {
             name: "Deep Space",
-            rarityLevel: 4,
+            rarityLevel: 5,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/2900-base-sauce-deepspace.png"],
             sizeMinMax: [1.0, 1.0],
             countMinMax: [1,1],
@@ -137,7 +129,7 @@ var KitchenData = {
     Cheeses: [
         {
             name: "Mozzarella",
-            rarityLevel: 0,
+            rarityLevel: 1,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/3000-base-cheese-mozzarella.png"],
             sizeMinMax: [1.0, 1.0],
             countMinMax: [1,1],
@@ -145,7 +137,7 @@ var KitchenData = {
         }, 
         {
             name: "Vegan",
-            rarityLevel: 2,
+            rarityLevel: 3,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/3100-base-cheese-vegan.png"],
             sizeMinMax: [1.0, 1.0],
             countMinMax: [1,1],
@@ -156,7 +148,7 @@ var KitchenData = {
     Toppings: [
         {
             name: "Pepperoni",
-            rarityLevel: 0,
+            rarityLevel: 1,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/4000-topping-meat-pepperoni.png"],
             sizeMinMax: [0.1, 0.15],
             countMinMax: [50,100],
@@ -164,7 +156,7 @@ var KitchenData = {
         },
         {
             name: "Salami",
-            rarityLevel: 0,
+            rarityLevel: 1,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/4650-topping-meat-salami.png"],
             sizeMinMax: [0.1, 0.15],
             countMinMax: [50,100],
@@ -172,7 +164,7 @@ var KitchenData = {
         },
         {
             name: "Special Salami",
-            rarityLevel: 0,
+            rarityLevel: 1,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/4660-topping-meat-salami.png"],
             sizeMinMax: [0.1, 0.15],
             countMinMax: [50,100],
@@ -180,7 +172,7 @@ var KitchenData = {
         },         
         {
             name: "Turkey Sausage",
-            rarityLevel: 1,
+            rarityLevel: 2,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/4950-topping-meat-turkeysausage.png"],
             sizeMinMax: [0.03, 0.08],
             countMinMax: [5,12],
@@ -188,7 +180,7 @@ var KitchenData = {
         },
         {
             name: "Tomato",
-            rarityLevel: 0,
+            rarityLevel: 1,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/5000-topping-fruit-tomato.png"],
             sizeMinMax: [0.1, 0.15],
             countMinMax: [50,100],
@@ -196,7 +188,7 @@ var KitchenData = {
         }, 
         {
             name: "Watermelon",
-            rarityLevel: 4,
+            rarityLevel: 5,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/5250-topping-fruit-watermelon.png"],
             sizeMinMax: [0.05, 0.1],
             countMinMax: [5,10],
@@ -204,7 +196,7 @@ var KitchenData = {
         }, 
         {
             name: "Special Watermelon",
-            rarityLevel: 3,
+            rarityLevel: 4,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/5260-topping-fruit-watermelon.png"],
             sizeMinMax: [0.05, 0.1],
             countMinMax: [5,10],
@@ -212,7 +204,7 @@ var KitchenData = {
         }, 
         {
             name: "Watermelon",
-            rarityLevel: 3,
+            rarityLevel: 4,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/5270-topping-fruit-watermelon.png"],
             sizeMinMax: [0.05, 0.1],
             countMinMax: [5,10],
@@ -220,7 +212,7 @@ var KitchenData = {
         }, 
         {
             name: "Watermelon",
-            rarityLevel: 2,
+            rarityLevel: 3,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/5280-topping-fruit-watermelon.png"],
             sizeMinMax: [0.05, 0.1],
             countMinMax: [5,10],
@@ -228,7 +220,7 @@ var KitchenData = {
         },
         {
             name: "Crickets",
-            rarityLevel: 4,
+            rarityLevel: 5,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/6100-topping-bugs-crickets.png"],
             sizeMinMax: [0.03, 0.08],
             countMinMax: [6,12],
@@ -236,7 +228,7 @@ var KitchenData = {
         },                         
         {
             name: "Astronaut",
-            rarityLevel: 4,
+            rarityLevel: 5,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/6500-toppings-space-astronaut.png"],
             sizeMinMax: [0.05, 0.15],
             countMinMax: [1,2],
@@ -244,7 +236,7 @@ var KitchenData = {
         },
         {
             name: "Lunar Landing",
-            rarityLevel: 3,
+            rarityLevel: 4,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/6510-toppings-space-lunarlander.png"],
             sizeMinMax: [0.05, 0.15],
             countMinMax: [1,1],
@@ -252,7 +244,7 @@ var KitchenData = {
         },      
         {
             name: "Snap Rocks",
-            rarityLevel: 3,
+            rarityLevel: 4,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/6800-topping-candy-snaprocks.png"],
             sizeMinMax: [0.05, 0.09],
             countMinMax: [1,3],
@@ -260,7 +252,7 @@ var KitchenData = {
         },
         {
             name: "Snap Rocks",
-            rarityLevel: 4,
+            rarityLevel: 5,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/6801-topping-candy-snaprocks.png"],
             sizeMinMax: [0.05, 0.09],
             countMinMax: [1,3],
@@ -268,7 +260,7 @@ var KitchenData = {
         },
         {
             name: "Snap Rocks",
-            rarityLevel: 3,
+            rarityLevel: 4,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/6802-topping-candy-snaprocks.png"],
             sizeMinMax: [0.05, 0.09],
             countMinMax: [1,3],
@@ -276,7 +268,7 @@ var KitchenData = {
         },
         {
             name: "Snap Rocks",
-            rarityLevel: 3,
+            rarityLevel: 4,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/6803-topping-candy-snaprocks.png"],
             sizeMinMax: [0.05, 0.09],
             countMinMax: [1,3],
@@ -284,7 +276,7 @@ var KitchenData = {
         },
         {
             name: "Shrimp",
-            rarityLevel: 1,
+            rarityLevel: 2,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/6000-topping-seafood-shrimp.png"],
             sizeMinMax: [0.05, 0.1],
             countMinMax: [5,10],
@@ -292,7 +284,7 @@ var KitchenData = {
         },  
         {
             name: "Pop Logo",
-            rarityLevel: 1,
+            rarityLevel: 2,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/8100-extra-special-poplogo.png"],
             sizeMinMax: [0.1, 0.2],
             countMinMax: [1,2],
@@ -300,7 +292,7 @@ var KitchenData = {
         },   
         {
             name: "Pop Logo",
-            rarityLevel: 2,
+            rarityLevel: 3,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/8101-extra-special-poplogo.png"],
             sizeMinMax: [0.1, 0.2],
             countMinMax: [1,2],
@@ -308,7 +300,7 @@ var KitchenData = {
         },   
         {
             name: "Worm",
-            rarityLevel: 3,
+            rarityLevel: 4,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/6150-topping-bugs-worms.png"],
             sizeMinMax: [0.05, 0.1],
             countMinMax: [3, 6],
@@ -318,94 +310,37 @@ var KitchenData = {
 
 }
 
+// TODO: move this function to KitchenData prep/export/authoring tool.
+// it will iterate all items in an array, normalize probabalities and 
+// calculate a non-decreasing probability tier for each.
+function cookProbabilities(items) {
+    // first calculate the total probability
+    var total = 0.0;
+    for (var i = 0; i < items.length; i++){
+        var item = items[i];
+        var rarityLevel = item.rarityLevel;
+        // sanity check
+        if (rarityLevel == undefined || rarityLevel == null)
+        rarityLevel = 1;
+        else
+        if (rarityLevel < 1)
+        rarityLevel = 1;
 
-// Function to choose X objects from an array of objects, each with a rarityLevel field.
-// return a list of the indices into the input array.
-function choose(arr, count, RarityLevels) {
-    var choices = [];
-
-    // first, bucketize all the possibilities and calculate the bucket probability.
-    // each bucket R0-R4 have a base probability. We will start with 1 / 2^n where n is 0...4.
-    // THOUGH we may want to change to 1/3^n). 
-    // but the base probability needs to be adjusted by the num of elements in that bucket 
-    // divided by the number of elements in R0.
-    // For ex.if there is 2 elems in R0 and 1 in R1, then there is equal probability that
-    // an item in R0 or R1 is chosen. That's not what we want. What we want is for an element
-    // in R1 to have 1/2 the probability of an element in R0. So we multiply the base bucket 
-    //probability by the count in the bucket divided by the count in R0.
-
-    // first, bucketize
-    // TODO: is it necessary to ensure the buckets are in decreasing probability?
-    //  
-    var buckets = [];
-    var totalProbability = 0.0;
-    for (var i = 0; i < RarityLevels.length; i++) {
-        var bucket = {};      
-        bucket.items = [];   // maybe a list is better since we will be removing items from it while we choose.
-        bucket.probability = RarityLevels[i].probability; // this will be adjusted once all buckets are filled.
-        totalProbability += bucket.probability;
-        buckets.push(bucket);
+        // map rarity level to relative probability (relative to 1)
+        item.relativeProbability = 1 / (Math.pow(2, rarityLevel - 1));
+        total += item.relativeProbability;
     }
 
-    // normalize probabilities so they add to 1.0
-    for (var i = 0; i < buckets.length; i++) {
-        buckets[i].probability = buckets[i].probability / totalProbability;
-    }    
-
-    // now bucketize!
-    for (var i = 0; i < arr.length; i++) {
-        var item = arr[i];
-        var rarityLevel = 0;
-        //sanity check
-        if (item.rarityLevel == undefined)
-            console.log(item.name + " needs a rarity level! Assume its R0.");
-        else
-            rarityLevel = item.rarityLevel;
-        if (rarityLevel < 0 )
-        {
-            console.log(item.name + " rarity level < 0! Assume its R0.");
-            rarityLevel = 0;           
-        }
-        else
-        if (rarityLevel >= buckets.length)
-        {
-            console.log(item.name + " rarity level > max level! Assume its max.");
-            rarityLevel = buckets.length - 1;           
-        }
-
-        // add to bucket
-        buckets[rarityLevel].items.push(item);
+    // now go back back and calculate/set the absolute probability and the non-decreasing probability tier
+    var tier = 0.0
+    for (var i = 0; i < items.length; i++){
+        var item = items[i];
+        item.absoluteProbability = item.relativeProbability / total;
+        tier += item.absoluteProbability;
+        item.probabilityTier = tier;
     }
-
-    // now all items are bucketized, so we need to go back and adjust the bucket probabilities
-    // to account for the counts in each relative to first bucket
-    var countInBucket0 = buckets[0].items.length;
-    var probablityOfBucket0 = buckets[0].probability;
-    for (var i = 1; i < buckets.length; i++) {
-        var countInBucket = buckets[i].items.length;
-        if (countInBucket > 0)
-        {
-            buckets[i].probability = buckets[i].probability * probablityOfBucket0 * (countInBucket / countInBucket0);
-            buckets[i].probabilityOfItemInBucket = buckets[i].probability / countInBucket;
-        }
-        else
-            buckets[i].probability = 0.0;
-    }   
-
-
-    // whew!! we are done building our data structure for choosing items.
-    // I guess we should actually choose them then!
-    for (var i = 0; i < count; i++) {
-        var rollTheDice = randomRangeFloat(rand, 0.0, 1.0);
-
-        // find which bucket this resides in....
-
-        // TODO: we might want to save off the probablity of this item 
-        // for description, etc.
-
-    }
-
-}
+  }
+  
 
 //////////////////////////////////////
 // The Rand function
@@ -1277,8 +1212,10 @@ exports.mulberry32 = mulberry32
 exports.randomRange = randomRange
 exports.randomRangeFloat = randomRangeFloat
 exports.randomPointOnDisk = randomPointOnDisk
-exports.KitchenData = KitchenData
 
+// move these
+exports.KitchenData = KitchenData
+exports.cookProbabilities = cookProbabilities
 
 
 
