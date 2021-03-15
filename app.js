@@ -1,16 +1,12 @@
 var http = require("http");
 var url = require('url');
 
-const {KitchenData, cookProbabilities, Pizza, generateDisplayList} = require('./js/Pizza/AllPizza.js');
-
+const {Pizza, generateDisplayList} = require('./js/Pizza/AllPizza.js');
+const {KitchenData, HACK_prepKitchenData} = require('./js/Pizza/KitchenData.js');
 
 // TODO HACK
-// since we don't have a KitchenData prep tool yet, cook probabilities here
-cookProbabilities(KitchenData.Boxes);
-cookProbabilities(KitchenData.Crusts);
-cookProbabilities(KitchenData.Sauces);
-cookProbabilities(KitchenData.Cheeses);
-cookProbabilities(KitchenData.Toppings);
+// since we don't have a KitchenData prep tool yet...
+HACK_prepKitchenData();
 
 http.createServer(function(request, response) {
     const headers = {
