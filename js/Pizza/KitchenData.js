@@ -149,7 +149,7 @@ var KitchenData = {
             name: "Salami",
             rarityLevel: 1,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/4650-topping-meat-salami.png"],
-            sizeMinMax: [0.1, 0.15],
+            sizeMinMax: [0.2, 0.25],
             countMinMax: [50,100],
             rotationMinMax: [-3.14159,3.14159]
         },
@@ -157,7 +157,7 @@ var KitchenData = {
             name: "Special Salami",
             rarityLevel: 1,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/4660-topping-meat-salami.png"],
-            sizeMinMax: [0.1, 0.15],
+            sizeMinMax: [0.2, 0.25],
             countMinMax: [50,100],
             rotationMinMax: [-3.14159,3.14159]
         },         
@@ -165,7 +165,7 @@ var KitchenData = {
             name: "Turkey Sausage",
             rarityLevel: 2,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/4950-topping-meat-turkeysausage.png"],
-            sizeMinMax: [0.03, 0.08],
+            sizeMinMax: [0.08, 0.12],
             countMinMax: [5,12],
             rotationMinMax: [-3.14159,3.14159]
         },
@@ -173,7 +173,7 @@ var KitchenData = {
             name: "Tomato",
             rarityLevel: 1,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/5000-topping-fruit-tomato.png"],
-            sizeMinMax: [0.1, 0.15],
+            sizeMinMax: [0.25, 0.4],
             countMinMax: [50,100],
             rotationMinMax: [-3.14159,3.14159]
         }, 
