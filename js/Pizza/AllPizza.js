@@ -613,10 +613,10 @@ function KITCHEN_chooseItem(items, diceRoll) {
     var lo = 0;
     var hi = items.length - 1;
 
-    console.log(items);
-    console.log(diceRoll);
+    //console.log(items);
+    //console.log(diceRoll);
     while (lo <= hi) {
-        console.log("lo = " + lo + " and hi = " + hi);
+        //console.log("lo = " + lo + " and hi = " + hi);
         var mid = Math.floor(lo + (hi - lo) / 2);
         if (diceRoll == items[mid].probabilityTier)
             return mid;
