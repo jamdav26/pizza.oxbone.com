@@ -46,6 +46,8 @@ http.createServer(function(request, response) {
 
       // generate marketing data
       ret.ingredientsData = pizza.generateIngredientsData(KitchenData);
+      ret.description = pizza.generatePizzaDescription(ret.ingredientsData);
+
     }
 
     // output json

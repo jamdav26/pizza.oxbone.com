@@ -877,6 +877,62 @@ Pizza.prototype.generateIngredientsData = function(KitchenData) {
 
 
 
+Pizza.prototype.generatePizzaDescription = function(ingredientsData) {
+    var desc = "";
+
+    // crust
+    desc = "A " + ingredientsData.crust.name + " crust ";
+    // sauces
+    for (var i = 0; i < ingredientsData.sauces.length; i++) {
+      if (i == 0)
+        desc += " with ";
+      desc += ingredientsData.sauces[i].name;
+
+      if (i == ingredientsData.sauces.length - 2)
+        desc += " and ";
+
+      if (i < ingredientsData.sauces.length - 2)
+        desc += ", ";
+    
+      if (i == ingredientsData.sauces.length - 1)        
+        desc += " sauce";
+    }
+
+    // cheeses
+    for (var i = 0; i < ingredientsData.cheeses.length; i++) {
+    if (i == 0)
+        desc += " covered with ";
+    desc += ingredientsData.cheeses[i].name;
+
+    if (i == ingredientsData.cheeses.length - 2)
+        desc += " and ";
+
+    if (i < ingredientsData.cheeses.length - 2)
+        desc += ", ";
+    
+    if (i == ingredientsData.cheeses.length - 1)        
+        desc += " cheese";
+
+    }  
+
+    // toppings
+    for (var i = 0; i < ingredientsData.toppings.length; i++) {
+    if (i == 0)
+        desc += " and smothered with ";
+    desc += ingredientsData.toppings[i].name;
+    if (i == ingredientsData.toppings.length - 2)
+        desc += " and ";
+    if (i < ingredientsData.toppings.length - 2)
+        desc += ", ";
+    }  
+
+    desc += "!";
+
+    return desc;
+  }
+
+
+
 ///////////////////////////////////////////////////
 // exports
 ///////////////////////////////////////////////////
