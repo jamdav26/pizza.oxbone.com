@@ -880,7 +880,40 @@ function getDisplayableProbability(fraction) {
     return (Math.round(fraction * 1000) / 10);
 }
 
+Pizza.prototype.calculatePizzaProbability = function(ingredientsData) {
+    // keep track of overall pizza ingredients probability
+    // this does NOT (yet) include dice rolls for num toppings (some might have different chances than others),
+    // num instances, and scatter type.
+    // that's a TODO: for at pizza making time and for here.
+    // TODO: store this directly in the return object. 
+    var pizzaIngredientsProbability = 1.0;
+
+    // crust
+    pizzaIngredientsProbability *= ingredientsData.crust.probability;
+    // sauces
+    for (var i = 0; i < ingredientsData.sauces.length; i++) {
+      pizzaIngredientsProbability *= ingredientsData.sauces[i].probability;
+    }
+
+    // cheeses
+    for (var i = 0; i < ingredientsData.cheeses.length; i++) {
+        pizzaIngredientsProbability *= ingredientsData.cheeses[i].probability;
+    }  
+
+    // toppings
+    for (var i = 0; i < ingredientsData.toppings.length; i++) {
+        pizzaIngredientsProbability *= ingredientsData.toppings[i].probability;
+    }  
+
+    // box
+    pizzaIngredientsProbability *= ingredientsData.box.probability;
+
+    // return
+    return pizzaIngredientsProbability;
+}
+
 Pizza.prototype.generatePizzaDescription = function(ingredientsData) {
+
     var desc = "";
 
     // crust
@@ -932,7 +965,7 @@ Pizza.prototype.generatePizzaDescription = function(ingredientsData) {
     }  
 
     // box
-    desc += " carefully packed in a " + ingredientsData.box.name;
+    desc += ", all carefully packed in a " + ingredientsData.box.name;
     desc += " (" + getDisplayableProbability(ingredientsData.box.probability) + "%)"; 
 
     desc += "!";
