@@ -179,7 +179,7 @@ var KitchenData = {
         }, 
         {
             name: "Watermelon",
-            rarityLevel: 5,
+            rarityLevel: 4,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/5250-topping-fruit-watermelon.png"],
             sizeMinMax: [0.05, 0.1],
             countMinMax: [5,10],
@@ -187,7 +187,7 @@ var KitchenData = {
         }, 
         {
             name: "Special Watermelon",
-            rarityLevel: 4,
+            rarityLevel: 5,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/5260-topping-fruit-watermelon.png"],
             sizeMinMax: [0.05, 0.1],
             countMinMax: [5,10],

@@ -854,40 +854,44 @@ Pizza.prototype.calculateDNA = function() {
 
 Pizza.prototype.generateIngredientsData = function(KitchenData) {
     var ingredientsData = {};
-    ingredientsData.box = {name: KitchenData.Boxes[this.boxIndex].name};
-    ingredientsData.crust = {name: KitchenData.Crusts[this.crustIndex].name}; 
+    ingredientsData.box = {name: KitchenData.Boxes[this.boxIndex].name, probability: KitchenData.Boxes[this.boxIndex].absoluteProbability};
+    ingredientsData.crust = {name: KitchenData.Crusts[this.crustIndex].name, probability: KitchenData.Crusts[this.crustIndex].absoluteProbability}; 
     ingredientsData.sauces = [];
     for (var iSauce = 0; iSauce < this.sauceIndices.length; iSauce++) {
         var sauce = KitchenData.Sauces[this.sauceIndices[iSauce]];
-        ingredientsData.sauces.push({name: sauce.name});
+        ingredientsData.sauces.push({name: sauce.name, probability: sauce.absoluteProbability});
     } 
     ingredientsData.cheeses = [];
     for (var iCheese = 0; iCheese < this.cheeseIndices.length; iCheese++) {
         var cheese = KitchenData.Cheeses[this.cheeseIndices[iCheese]];
-        ingredientsData.cheeses.push({name: cheese.name});
+        ingredientsData.cheeses.push({name: cheese.name, probability: cheese.absoluteProbability});
     } 
     ingredientsData.toppings = [];
     for (var iTopping = 0; iTopping < this.toppingIndices.length; iTopping++) {
         var topping = KitchenData.Toppings[this.toppingIndices[iTopping]];
-        ingredientsData.toppings.push({name: topping.name});
+        ingredientsData.toppings.push({name: topping.name, probability: topping.absoluteProbability});
     }  
     
     return ingredientsData;
 }
 
-
+// util func
+function getDisplayableProbability(fraction) {
+    return (Math.round(fraction * 1000) / 10);
+}
 
 Pizza.prototype.generatePizzaDescription = function(ingredientsData) {
     var desc = "";
 
     // crust
     desc = "A " + ingredientsData.crust.name + " crust ";
+    desc += " (" + getDisplayableProbability(ingredientsData.crust.probability) + "%)";
     // sauces
     for (var i = 0; i < ingredientsData.sauces.length; i++) {
       if (i == 0)
         desc += " with ";
       desc += ingredientsData.sauces[i].name;
-
+      desc += " (" + getDisplayableProbability(ingredientsData.sauces[i].probability) + "%)";
       if (i == ingredientsData.sauces.length - 2)
         desc += " and ";
 
@@ -903,7 +907,7 @@ Pizza.prototype.generatePizzaDescription = function(ingredientsData) {
     if (i == 0)
         desc += " covered with ";
     desc += ingredientsData.cheeses[i].name;
-
+    desc += " (" + getDisplayableProbability(ingredientsData.cheeses[i].probability) + "%)";
     if (i == ingredientsData.cheeses.length - 2)
         desc += " and ";
 
@@ -920,11 +924,16 @@ Pizza.prototype.generatePizzaDescription = function(ingredientsData) {
     if (i == 0)
         desc += " and smothered with ";
     desc += ingredientsData.toppings[i].name;
+    desc += " (" + getDisplayableProbability(ingredientsData.toppings[i].probability) + "%)";
     if (i == ingredientsData.toppings.length - 2)
         desc += " and ";
     if (i < ingredientsData.toppings.length - 2)
         desc += ", ";
     }  
+
+    // box
+    desc += " carefully packed in a " + ingredientsData.box.name;
+    desc += " (" + getDisplayableProbability(ingredientsData.box.probability) + "%)"; 
 
     desc += "!";
 
