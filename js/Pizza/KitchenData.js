@@ -147,7 +147,7 @@ var KitchenData = {
         },
         {
             name: "Salami",
-            rarityLevel: 1,
+            rarityLevel: 2,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/4650-topping-meat-salami.png"],
             sizeMinMax: [0.2, 0.25],
             countMinMax: [25,50],
@@ -155,7 +155,7 @@ var KitchenData = {
         },
         {
             name: "Special Salami",
-            rarityLevel: 3,
+            rarityLevel: 4,
             imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/4660-topping-meat-salami.png"],
             sizeMinMax: [0.2, 0.25],
             countMinMax: [25,50],
