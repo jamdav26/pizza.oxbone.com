@@ -285,14 +285,6 @@ function concentricCirclesScatter(rand, count, renderObjList, KitchenData) {
 
 }
 
-
-function chooseScatterBasedOnRarity(rand, KitchenData) {
-    // HACK for now just return random!
-    // TODO: bucketize it, roll dice, choose from scatters in the chosen bucket
-    return randomRange(rand, 0, KitchenData.ScatterMethods.length - 1);
-}
-
-
 //////////////////////////////////////////////////
 // Display List
 //////////////////////////////////////////////////
@@ -352,11 +344,8 @@ function generateDisplayList(pizza, KitchenData) {
         var toppingCount = randomRange(pizza.rand, topping.countMinMax[0], topping.countMinMax[1]);
 
         // scatter
-        // we might a scatter min/max queries so we know if a particular scatter will work with the number of coords we chose, 
-        // and if not adjust them or choose another scatter. all that should probably be done in the make function
-        // TODO: get this from pizza dna for this topping, or for now randomly choose it? 
-        // TODO: should be based on rarity of scatter
-        var scatterIndex = chooseScatterBasedOnRarity(pizza.rand, KitchenData); 
+        // TODO: move this to the make function
+        var scatterIndex = KITCHEN_chooseItem(KitchenData.ScatterMethods, randomRangeFloat(pizza.rand, 0.0, 1.0));
         var scatter = scatterTable[KitchenData.ScatterMethods[scatterIndex].name];
 
         var toppingRenderObjs = [];
@@ -688,6 +677,10 @@ Pizza.prototype.makeRandom = function(overrides, KitchenData)
     {
         index = KITCHEN_chooseItem(KitchenData.Toppings, randomRangeFloat(localRand, 0.0, 1.0));
         this.toppingMask.setBit(index, 1); 
+
+        // TODO: choose a scatter for this topping
+
+        // TODO: choose num instances of this topping (may query scatter for min/max range, otherwise use the topping one)
     }
 
     // choose and seed random generator

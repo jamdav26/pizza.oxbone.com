@@ -340,6 +340,7 @@ function HACK_prepKitchenData() {
     cookProbabilities(KitchenData.Sauces);
     cookProbabilities(KitchenData.Cheeses);
     cookProbabilities(KitchenData.Toppings);     
+    cookProbabilities(KitchenData.ScatterMethods);
 }
 
 // move these
