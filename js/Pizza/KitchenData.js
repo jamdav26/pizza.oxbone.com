@@ -15,9 +15,9 @@ var KitchenData = {
     // at pizza make time the chosen scatter here is used to look into that table for the correct scatter method.
     ScatterMethods: [
         {name: "Random", rarityLevel: 1},
-        {name: "Spiral", rarityLevel: 4},
-        {name: "Smiley", rarityLevel: 5},  
-        {name: "Spokes", rarityLevel: 3},     
+        {name: "Spiral", rarityLevel: 2},
+        {name: "Smiley", rarityLevel: 3},  
+        {name: "Spokes", rarityLevel: 2},     
         {name: "Concentric Circles", rarityLevel: 2},                
     ],
 
