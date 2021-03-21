@@ -717,7 +717,7 @@ Pizza.prototype.makeRandom = function(overrides, KitchenData)
 
     // randomly choose cheeses
     this.cheeseMask = new Bitfield("00");
-    var numCheeses = randomRange(localRand, 0, KitchenData.Cheeses.length);
+    var numCheeses = randomRange(localRand, 0, Math.min(KitchenData.Rules.MAX_CHEESES_PER_PIZZA, KitchenData.Cheeses.length));
     for (var iCheese = 0; iCheese < numCheeses; iCheese++)
     {
         index = KITCHEN_chooseItem(KitchenData.Cheeses, randomRangeFloat(localRand, 0.0, 1.0));
@@ -729,7 +729,8 @@ Pizza.prototype.makeRandom = function(overrides, KitchenData)
     //this.toppingIndices = [];
     this.toppingMask = new Bitfield("");
     this.toppingMask.growBy(30);
-    var numToppings = randomRange(localRand, 0, KitchenData.Toppings.length);
+    // TODO: num toppings rarity array
+    var numToppings = randomRange(localRand, 0, Math.min(KitchenData.Rules.MAX_TOPPINGS_PER_PIZZA, KitchenData.Toppings.length));
     for (var iTopping = 0; iTopping < numToppings; iTopping++)
     {
         index = KITCHEN_chooseItem(KitchenData.Toppings, randomRangeFloat(localRand, 0.0, 1.0));
