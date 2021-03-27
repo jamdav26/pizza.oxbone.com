@@ -725,21 +725,21 @@ Pizza.prototype.calculateDNA = function() {
 
 Pizza.prototype.generateIngredientsData = function(KitchenData) {
     var ingredientsData = {};
-    ingredientsData.box = {name: KitchenData.Boxes[this.boxIndex].name, probability: KitchenData.Boxes[this.boxIndex].absoluteProbability};
-    ingredientsData.crust = {name: KitchenData.Crusts[this.crustIndex].name, probability: KitchenData.Crusts[this.crustIndex].absoluteProbability}; 
+    ingredientsData.box = {imageUrl: KitchenData.Boxes[this.boxIndex].imageUrls[0], name: KitchenData.Boxes[this.boxIndex].name, probability: KitchenData.Boxes[this.boxIndex].absoluteProbability};
+    ingredientsData.crust = {imageUrl: KitchenData.Crusts[this.crustIndex].imageUrls[0], name: KitchenData.Crusts[this.crustIndex].name, probability: KitchenData.Crusts[this.crustIndex].absoluteProbability}; 
     ingredientsData.sauces = [];
     var sauce = KitchenData.Sauces[this.sauceIndex];
-    ingredientsData.sauces.push({name: sauce.name, probability: sauce.absoluteProbability});
+    ingredientsData.sauces.push({imageUrl: sauce.imageUrls[0], name: sauce.name, probability: sauce.absoluteProbability});
     
     ingredientsData.cheeses = [];
     for (var iCheese = 0; iCheese < this.cheeseIndices.length; iCheese++) {
         var cheese = KitchenData.Cheeses[this.cheeseIndices[iCheese].index];
-        ingredientsData.cheeses.push({name: cheese.name, probability: cheese.absoluteProbability});
+        ingredientsData.cheeses.push({imageUrl: cheese.imageUrls[0], name: cheese.name, probability: cheese.absoluteProbability});
     } 
     ingredientsData.toppings = [];
     for (var iTopping = 0; iTopping < this.toppingIndices.length; iTopping++) {
         var topping = KitchenData.Toppings[this.toppingIndices[iTopping].index];
-        ingredientsData.toppings.push({name: topping.name, probability: topping.absoluteProbability});
+        ingredientsData.toppings.push({imageUrl: topping.imageUrls[0], name: topping.name, probability: topping.absoluteProbability});
     }  
     
     return ingredientsData;
