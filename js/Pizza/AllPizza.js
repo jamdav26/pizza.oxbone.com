@@ -739,7 +739,8 @@ Pizza.prototype.generateIngredientsData = function(KitchenData) {
     ingredientsData.toppings = [];
     for (var iTopping = 0; iTopping < this.toppingIndices.length; iTopping++) {
         var topping = KitchenData.Toppings[this.toppingIndices[iTopping].index];
-        ingredientsData.toppings.push({imageUrl: topping.imageUrls[0], name: topping.name, probability: topping.absoluteProbability});
+        var scatter = KitchenData.ScatterMethods[this.toppingIndices[iTopping].scatterIndex];
+        ingredientsData.toppings.push({imageUrl: topping.imageUrls[0], name: topping.name, probability: topping.absoluteProbability, scatter: {name: scatter.name, probability: scatter.absoluteProbability}});
     }  
     
     return ingredientsData;
@@ -774,6 +775,8 @@ Pizza.prototype.calculatePizzaProbability = function(ingredientsData) {
     // toppings
     for (var i = 0; i < ingredientsData.toppings.length; i++) {
         pizzaIngredientsProbability *= ingredientsData.toppings[i].probability;
+        // multiply in the scatter
+        pizzaIngredientsProbability *= ingredientsData.toppings[i].scatter.probability;      
     }  
 
     // box
