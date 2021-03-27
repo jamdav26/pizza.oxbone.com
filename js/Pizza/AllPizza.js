@@ -558,7 +558,6 @@ function KITCHEN_chooseItem(items, diceRoll) {
 // Pizza
 //////////////////////////////////////////
 function Pizza() {
-    this.DNA_DELIM = '_';
 }
 
 Pizza.prototype.makeRandom = function(overrides, KitchenData) 
@@ -644,21 +643,12 @@ Pizza.prototype.makeFromDna = function(dna)
     for (var iChar = 0; iChar < dna.length; iChar++)
     {
         var c = dna[iChar];
-        if ((isInEncodingSet(c) == false) && (c != this.DNA_DELIM))
+        if (isInEncodingSet(c) == false)
         {
             console.log("illegal dna.");
             return -1;
         }
     }
-
-    // here break off the seed
-    const tokens = dna.split(this.DNA_DELIM);
-    if (tokens.length != 2)
-    {
-        console.log("illegal dna.");
-        return -1;
-    }
-    this.seed = parseInt(tokens[1]);
 
     // read version
     var currChar = 0;
@@ -691,6 +681,9 @@ Pizza.prototype.makeFromDna = function(dna)
         var instanceCount = decodeCharToNum(dna.substring(currChar, ++currChar));
         this.toppingIndices.push({index: index, scatterIndex: scatterIndex, instanceCount: instanceCount});
     }
+
+    // the rest is the seed
+    this.seed = parseInt(dna.substring(currChar));
     
     // create rand from seed
     // TODO: don't need these now, so don't create it.
@@ -726,8 +719,7 @@ Pizza.prototype.calculateDNA = function() {
         dna += encodeNumToChar(toppingEntry.scatterIndex);
         dna += encodeNumToChar(toppingEntry.instanceCount);       
     }
-
-    dna += this.DNA_DELIM;
+    
     dna += this.seed;
 
     return dna; 
