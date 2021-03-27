@@ -356,25 +356,29 @@ function generateDisplayList(pizza, KitchenData) {
     displayBundle.displayList = [];
     displayBundle.version = DL_VERSION;
 
+    // create rand from the pizza seed
+    var rand = mulberry32(this.seed); 
+
+
     // now generate renderables and push onto list
     var renderObj = {};
 
     // box
     renderObj = {};
     var box = KitchenData.Boxes[pizza.boxIndex];
-    renderObj = createAndAppendRenderObjFromVariant(pizza.rand, box, displayBundle, textureToIndexMap);   
+    renderObj = createAndAppendRenderObjFromVariant(rand, box, displayBundle, textureToIndexMap);   
     displayBundle.displayList.push(renderObj);
 
     // crust
     renderObj = {};
     var crust = KitchenData.Crusts[pizza.crustIndex];
-    renderObj = createAndAppendRenderObjFromVariant(pizza.rand, crust, displayBundle, textureToIndexMap);   
+    renderObj = createAndAppendRenderObjFromVariant(rand, crust, displayBundle, textureToIndexMap);   
     displayBundle.displayList.push(renderObj);
 
     // sauce
     renderObj = {};  
     var sauce = KitchenData.Sauces[pizza.sauceIndex];
-    renderObj = createAndAppendRenderObjFromVariant(pizza.rand, sauce, displayBundle, textureToIndexMap); 
+    renderObj = createAndAppendRenderObjFromVariant(rand, sauce, displayBundle, textureToIndexMap); 
     displayBundle.displayList.push(renderObj);
 
     
@@ -384,7 +388,7 @@ function generateDisplayList(pizza, KitchenData) {
         renderObj = {};
         var cheeseIndex = pizza.cheeseIndices[i].index;
         var cheese = KitchenData.Cheeses[cheeseIndex];
-        renderObj = createAndAppendRenderObjFromVariant(pizza.rand, cheese, displayBundle, textureToIndexMap); 
+        renderObj = createAndAppendRenderObjFromVariant(rand, cheese, displayBundle, textureToIndexMap); 
         displayBundle.displayList.push(renderObj);
     }  
 
@@ -405,12 +409,12 @@ function generateDisplayList(pizza, KitchenData) {
         var toppingRenderObjs = [];
         for (var iCount = 0; iCount < toppingCount; iCount++)
         {
-            renderObj = createAndAppendRenderObjFromVariant(pizza.rand, topping, displayBundle, textureToIndexMap);  
+            renderObj = createAndAppendRenderObjFromVariant(rand, topping, displayBundle, textureToIndexMap);  
             toppingRenderObjs.push(renderObj); 
         }
 
         // now call scatter to get positions, then append them
-        var positions = scatter.scatter(pizza.rand, toppingCount, toppingRenderObjs, KitchenData);
+        var positions = scatter.scatter(rand, toppingCount, toppingRenderObjs, KitchenData);
         // TODO: assert positions.length == toppingCount
         for (var iCount = 0; iCount < toppingCount; iCount++)
         {
@@ -609,9 +613,6 @@ Pizza.prototype.makeRandom = function(overrides, KitchenData)
     // choose and seed random generator
     this.seed = Date.now(); // TODO: choose better seed?
 
-    // TODO: don't need this rand here. make later when making display list.
-    this.rand = mulberry32(this.seed); 
-
     this.dna = this.calculateDNA();
 
     return this.dna;
@@ -685,10 +686,6 @@ Pizza.prototype.makeFromDna = function(dna)
     // the rest is the seed
     this.seed = parseInt(dna.substring(currChar));
     
-    // create rand from seed
-    // TODO: don't need these now, so don't create it.
-    this.rand = mulberry32(this.seed); 
-
     // if we got this far then it's a valid dna, so assign it
     this.dna = dna;
 }
@@ -719,7 +716,7 @@ Pizza.prototype.calculateDNA = function() {
         dna += encodeNumToChar(toppingEntry.scatterIndex);
         dna += encodeNumToChar(toppingEntry.instanceCount);       
     }
-    
+
     dna += this.seed;
 
     return dna; 
