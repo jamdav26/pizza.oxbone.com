@@ -357,7 +357,7 @@ function generateDisplayList(pizza, KitchenData) {
     displayBundle.version = DL_VERSION;
 
     // create rand from the pizza seed
-    var rand = mulberry32(this.seed); 
+    var rand = mulberry32(pizza.seed); 
 
 
     // now generate renderables and push onto list
