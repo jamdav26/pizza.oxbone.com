@@ -18,7 +18,8 @@ var KitchenData = {
         {name: "Spiral", rarityLevel: 2},
         {name: "Face", rarityLevel: 3},  
         {name: "Spokes", rarityLevel: 2},     
-        {name: "Concentric Circles", rarityLevel: 2},                
+        {name: "Concentric Circles", rarityLevel: 2}, 
+        {name: "Grid", rarityLevel: 1},                     
     ],
 
     // TODO: refactor these so that boxes crusts, sauces, cheeses contains variant objects, each with different rarities.

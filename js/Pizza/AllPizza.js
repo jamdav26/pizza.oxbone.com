@@ -57,6 +57,21 @@ function randomPointOnDisk(rand, centerX, centerY, radius)
     return [x,y];
 }
 
+class Vec2 {
+    constructor(x,y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    rotate(rads) {
+        var cosRads = Math.cos(rads);
+        var sinRads = Math.sin(rads);
+        var x = this.x * cosRads - this.y * sinRads;
+        var y = this.y * cosRads + this.x * sinRads;
+        this.x = x;
+        this.y = y;
+    }
+}
 
 /////////////////////////////////////////////////////////////////
 // Scatters
@@ -332,6 +347,66 @@ class ConcentricCirclesScatter extends Scatter {
     }        
 }
 
+class GridScatter extends Scatter {
+    constructor(name, minInstanceCount = -1, maxInstanceCount = -1) {
+        super(name);
+        this.minInstanceCount = minInstanceCount;
+        this.maxInstanceCount = maxInstanceCount; 
+    }
+
+    scatter(rand, count, renderObjList, KitchenData) {
+        var ret = [];
+
+        // divide the disk into grids and put a topping in each one.
+        var gridDim = Math.floor(Math.sqrt(count));
+ 
+        // iterate grids and place an instance randomly in each
+        var placedCount = 0;
+        // base entire square off of the radius - the scale of first instance
+        var start = -0.5 + (0.5 - KitchenData.Rules.RADIUS_OF_TOPPINGS_WITHIN_CRUST) + renderObjList[0].scale/2;
+        var squareWidth = 2 * Math.abs(start);
+        var gridSize = squareWidth / gridDim;   
+        for (var i = 0; i < gridDim; i++)
+        {
+            for (var j = 0; j < gridDim; j++)
+            {
+                var left = start + gridSize * j;
+                var top = start + gridSize * i;
+
+                // pick random pos in this grid 
+                // TODO: we could shrink this by the scale of the topping
+             //   var x = randomRangeFloat(rand, left, left + gridSize);
+              //  var y = randomRangeFloat(rand, top, top + gridSize);  // ????? 
+                var x = left + gridSize/2;
+                var y = top + gridSize/2;       
+                
+                ret.push([x,y]);  
+                placedCount++;      
+            }          
+        }
+
+        // pick up the rest of count that 
+        while (placedCount < count)
+        {
+            // TODO: for now put at center
+            ret.push([0,0]);  
+            placedCount++;
+        }
+
+        // for fun, rotate all points by angle
+        var rads = randomRangeFloat(rand, -PI, PI);
+        for (var i = 0; i < ret.length; i++) {
+            var pt = ret[i];
+            var vec = new Vec2(pt[0], pt[1]);
+            vec.rotate(rads);
+            ret[i][0] = vec.x;
+            ret[i][1] = vec.y;
+        }
+
+        return ret;
+    }
+}
+
 /////////////////////////
 // create some scatters
 /////////////////////////
@@ -340,7 +415,7 @@ new SpiralScatter("Spiral");
 new FaceScatter("Face");
 new SpokesScatter("Spokes");
 new ConcentricCirclesScatter("Concentric Circles");
-
+new GridScatter("Grid");
 
 //////////////////////////////////////////////////
 // Display List
