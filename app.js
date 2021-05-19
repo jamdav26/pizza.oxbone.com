@@ -2,11 +2,9 @@ var http = require("http");
 var url = require('url');
 
 const {Pizza, generateDisplayList} = require('./js/Pizza/AllPizza.js');
-const {KitchenData, HACK_prepKitchenData} = require('./js/Pizza/KitchenData.js');
 
-// TODO HACK
-// since we don't have a KitchenData prep tool yet...
-HACK_prepKitchenData();
+// load the kitchen data from JSON
+let KitchenData = require('./kitchen_data.json');
 
 http.createServer(function(request, response) {
     const headers = {

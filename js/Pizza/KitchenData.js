@@ -334,14 +334,16 @@ function cookProbabilities(items) {
   }
   
 
-function HACK_prepKitchenData() {
+function HACK_prepKitchenData(kd) {
     // cook probabilities
-    cookProbabilities(KitchenData.Boxes);
-    cookProbabilities(KitchenData.Crusts);
-    cookProbabilities(KitchenData.Sauces);
-    cookProbabilities(KitchenData.Cheeses);
-    cookProbabilities(KitchenData.Toppings);     
-    cookProbabilities(KitchenData.ScatterMethods);
+    cookProbabilities(kd.Boxes);   
+    if (kd.Papers != undefined)  
+        cookProbabilities(kd.Papers);
+    cookProbabilities(kd.Crusts);
+    cookProbabilities(kd.Sauces);
+    cookProbabilities(kd.Cheeses);
+    cookProbabilities(kd.Toppings);     
+    cookProbabilities(kd.ScatterMethods);
 }
 
 // move these
