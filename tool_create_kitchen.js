@@ -170,8 +170,8 @@ function AddTopping(fullPath, name, kd)
     //    name: "Pepperoni",
         rarityLevel: 1,
     //    imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/4000-topping-meat-pepperoni.png"],
-        sizeMinMax: [0.1, 0.15],
-        countMinMax: [2,15],
+        sizeMinMax: [0.1, 0.25],
+        countMinMax: [2,20],
         rotationMinMax: [-3.14159,3.14159]
     };
 
@@ -185,7 +185,7 @@ function AddTopping(fullPath, name, kd)
 }
 
 // iterate folder
-const ingredients_folder_name = "../oxbone.com/Pizza/images/ingredients"
+const ingredients_folder_name = "../oxbone.com/Pizza/images/ingredients2"
 
 var files = fs.readdirSync(ingredients_folder_name);
 files.forEach(function(file) {
@@ -202,28 +202,35 @@ files.forEach(function(file) {
     {
          //console.log(file);
 
-          // tokenize the filename
-          var tokens = file.split("-");
+         // to lowercase
+         file = file.toLowerCase();
+
+          // tokenize the filename, stripping off extension first
+          var fileForTokens = file.split('.').slice(0, -1).join('.');
+          var tokens = fileForTokens.split("-");
 
           // TODO: later we can derive better info from the filename
           // look for keywords "box", "crust", "sauce", "cheese"
           // otherwise assume its a topping
 
-          var fullPath = "https://www.oxbone.com/Pizza/Images/Ingredients/" + file;
+          var fullPath = "https://www.oxbone.com/Pizza/Images/Ingredients2/" + file;
 
            //console.log(tokens);
+           if (isA(tokens, "topping") == true)
+                AddTopping(fullPath, tokens[3], KitchenData); 
+            else
             if (isA(tokens, "box") == true)
-                AddBox(fullPath, tokens[4], KitchenData);
+                AddBox(fullPath, tokens[2], KitchenData);
             else if (isA(tokens, "paper") == true)
-                AddPaper(fullPath, tokens[4], KitchenData);
+                AddPaper(fullPath, tokens[2], KitchenData);
             else if (isA(tokens, "crust") == true)
-                AddCrust(fullPath, tokens[4], KitchenData);
+                AddCrust(fullPath, tokens[2], KitchenData);
             else if (isA(tokens, "sauce") == true)
-                AddSauce(fullPath, tokens[4], KitchenData); 
+                AddSauce(fullPath, tokens[2], KitchenData); 
             else if (isA(tokens, "cheese") == true)
-                AddCheese(fullPath, tokens[4], KitchenData);  
+                AddCheese(fullPath, tokens[2], KitchenData);  
             else // assume topping
-                AddTopping(fullPath, tokens[4], KitchenData);        
+                AddTopping(fullPath, tokens[3], KitchenData);        
     }
 })
 

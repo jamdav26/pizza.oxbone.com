@@ -444,6 +444,12 @@ function generateDisplayList(pizza, KitchenData) {
     renderObj = createAndAppendRenderObjFromVariant(rand, box, displayBundle, textureToIndexMap);   
     displayBundle.displayList.push(renderObj);
 
+      // paper
+      renderObj = {};
+      var paper = KitchenData.Papers[pizza.paperIndex];
+      renderObj = createAndAppendRenderObjFromVariant(rand, paper, displayBundle, textureToIndexMap);   
+      displayBundle.displayList.push(renderObj);  
+
     // crust
     renderObj = {};
     var crust = KitchenData.Crusts[pizza.crustIndex];
@@ -649,6 +655,9 @@ Pizza.prototype.makeRandom = function(overrides, KitchenData)
     // choose box
     this.boxIndex = KITCHEN_chooseItem(KitchenData.Boxes, randomRangeFloat(localRand, 0.0, 1.0));
 
+    // choose paper
+    this.paperIndex = KITCHEN_chooseItem(KitchenData.Papers, randomRangeFloat(localRand, 0.0, 1.0));
+
     // randomly choose crust
     this.crustIndex = KITCHEN_chooseItem(KitchenData.Crusts, randomRangeFloat(localRand, 0.0, 1.0));
 
@@ -731,6 +740,7 @@ Pizza.prototype.makeFromDna = function(dna)
     this.version = dna.substring(currChar, ++currChar);
     // TODO: READING THE REST DEPENDS ON WHICH VERSION IT IS!
     this.boxIndex = decodeCharToNum(dna.substring(currChar, ++currChar));   
+    this.paperIndex = decodeCharToNum(dna.substring(currChar, ++currChar));      
     this.crustIndex = decodeCharToNum(dna.substring(currChar, ++currChar)); 
     this.sauceIndex = decodeCharToNum(dna.substring(currChar, ++currChar));   
 
@@ -773,6 +783,7 @@ Pizza.prototype.calculateDNA = function() {
     dna += encodeNumToChar(this.CURRENT_VERSION);
 
     dna += encodeNumToChar(this.boxIndex);
+    dna += encodeNumToChar(this.paperIndex);   
     dna += encodeNumToChar(this.crustIndex);
     dna += encodeNumToChar(this.sauceIndex);
     dna += encodeNumToChar(this.cheeseIndices.length);
@@ -801,6 +812,8 @@ Pizza.prototype.calculateDNA = function() {
 Pizza.prototype.generateIngredientsData = function(KitchenData) {
     var ingredientsData = {};
     ingredientsData.box = {imageUrl: KitchenData.Boxes[this.boxIndex].imageUrls[0], name: KitchenData.Boxes[this.boxIndex].name, probability: KitchenData.Boxes[this.boxIndex].absoluteProbability};
+    ingredientsData.paper = {imageUrl: KitchenData.Papers[this.paperIndex].imageUrls[0], name: KitchenData.Papers[this.paperIndex].name, probability: KitchenData.Papers[this.paperIndex].absoluteProbability};
+     
     ingredientsData.crust = {imageUrl: KitchenData.Crusts[this.crustIndex].imageUrls[0], name: KitchenData.Crusts[this.crustIndex].name, probability: KitchenData.Crusts[this.crustIndex].absoluteProbability}; 
     ingredientsData.sauces = [];
     var sauce = KitchenData.Sauces[this.sauceIndex];
@@ -915,7 +928,7 @@ Pizza.prototype.generatePizzaDescription = function(ingredientsData) {
     }  
 
     // box
-    desc += ", all carefully packed in a " + ingredientsData.box.name;
+    desc += ", all carefully packed in a " + ingredientsData.box.name + " box"
     desc += " (" + getDisplayableProbability(ingredientsData.box.probability) + "%)"; 
 
     desc += "!";
