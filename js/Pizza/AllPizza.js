@@ -445,10 +445,13 @@ function generateDisplayList(pizza, KitchenData) {
     displayBundle.displayList.push(renderObj);
 
       // paper
-      renderObj = {};
-      var paper = KitchenData.Papers[pizza.paperIndex];
-      renderObj = createAndAppendRenderObjFromVariant(rand, paper, displayBundle, textureToIndexMap);   
-      displayBundle.displayList.push(renderObj);  
+      if (pizza.paperIndex >= 0)
+      {
+        renderObj = {};
+        var paper = KitchenData.Papers[pizza.paperIndex];
+        renderObj = createAndAppendRenderObjFromVariant(rand, paper, displayBundle, textureToIndexMap);   
+        displayBundle.displayList.push(renderObj);  
+      }
 
     // crust
     renderObj = {};
@@ -931,6 +934,11 @@ Pizza.prototype.generatePizzaDescription = function(ingredientsData) {
     desc += ", all carefully packed in a " + ingredientsData.box.name + " box"
     desc += " (" + getDisplayableProbability(ingredientsData.box.probability) + "%)"; 
 
+    // paper
+    desc += " with " + ingredientsData.paper.name + " paper"
+    desc += " (" + getDisplayableProbability(ingredientsData.paper.probability) + "%)"; 
+
+    // end
     desc += "!";
 
     return desc;

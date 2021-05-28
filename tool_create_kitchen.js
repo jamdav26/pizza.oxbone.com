@@ -171,7 +171,7 @@ function AddTopping(fullPath, name, kd)
         rarityLevel: 1,
     //    imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/4000-topping-meat-pepperoni.png"],
         sizeMinMax: [0.1, 0.25],
-        countMinMax: [2,20],
+        countMinMax: [1,8],
         rotationMinMax: [-3.14159,3.14159]
     };
 
