@@ -202,6 +202,9 @@ class FaceScatter extends Scatter {
         {
             var x = startX + i * (0.5 / numSteps);
             var y = 0.25;
+
+            // TODO: adjust to make sure it doesn't go off the crust.
+            
             ret.push([x,y]);
         }
     
@@ -362,8 +365,15 @@ class GridScatter extends Scatter {
  
         // iterate grids and place an instance randomly in each
         var placedCount = 0;
-        // base entire square off of the radius - the scale of first instance
-        var start = -0.5 + (0.5 - KitchenData.Rules.RADIUS_OF_TOPPINGS_WITHIN_CRUST) + renderObjList[0].scale/2;
+        // calc the max scale in the topping list
+        var maxScale = 0.0;
+        for(var iRO = 0; iRO < renderObjList.length; iRO++)
+        {
+            if (renderObjList[iRO].scale > maxScale)
+            maxScale = renderObjList[iRO].scale;
+        }
+         // base entire square off of the radius - the max scale
+        var start = -0.5 + (0.5 - KitchenData.Rules.RADIUS_OF_TOPPINGS_WITHIN_CRUST) + maxScale/2;
         var squareWidth = 2 * Math.abs(start);
         var gridSize = squareWidth / gridDim;   
         for (var i = 0; i < gridDim; i++)
@@ -378,8 +388,7 @@ class GridScatter extends Scatter {
              //   var x = randomRangeFloat(rand, left, left + gridSize);
               //  var y = randomRangeFloat(rand, top, top + gridSize);  // ????? 
                 var x = left + gridSize/2;
-                var y = top + gridSize/2;       
-                
+                var y = top + gridSize/2;                 
                 ret.push([x,y]);  
                 placedCount++;      
             }          
@@ -503,6 +512,9 @@ function generateDisplayList(pizza, KitchenData) {
         for (var iCount = 0; iCount < toppingCount; iCount++)
         {
             renderObj = toppingRenderObjs[iCount];
+
+            // TODO: here we could globally force each topping to be on crust by pushing it in toward
+            // the center by the scaled radius so that it fits.
             renderObj.center = positions[iCount];
             displayBundle.displayList.push(renderObj);
         }
