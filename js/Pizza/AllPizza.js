@@ -198,14 +198,28 @@ class FaceScatter extends Scatter {
         var startX = -.25;
     
         var numSteps = count - used;
-        for (var i = 0; i < numSteps; i++)
+        if (numSteps <= 1)
         {
-            var x = startX + i * (0.5 / numSteps);
-            var y = 0.25;
+            for (var i = 0; i < numSteps; i++)
+            {
+                // right in center of mouth
+                var x = 0.0;
+                var y = 0.25;    
+                ret.push([x,y]);
+            }
+        }
+        else
+        {
+            var inc = 0.5 / (numSteps - 1);
+            for (var i = 0; i < numSteps; i++)
+            {
+                var x = startX + i * inc;
+                var y = 0.25;
 
-            // TODO: adjust to make sure it doesn't go off the crust.
-            
-            ret.push([x,y]);
+                // TODO: adjust to make sure it doesn't go off the crust.
+                
+                ret.push([x,y]);
+            }
         }
     
         return ret;
