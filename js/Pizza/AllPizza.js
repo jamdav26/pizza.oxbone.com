@@ -193,7 +193,53 @@ class FaceScatter extends Scatter {
             ret.push([x,y]);
             used++;
         }
-    
+ 
+        // calc the max scale in the topping list
+        var maxScale = 0.0;
+        for(var iRO = 0; iRO < renderObjList.length; iRO++)
+        {
+            if (renderObjList[iRO].scale > maxScale)
+            maxScale = renderObjList[iRO].scale;
+        }
+
+        // place smile with remaining pieces
+                    
+        // choose centerpoint of smile
+        var smileCenter = [0.0, 0.0];
+        var smileRadius = KitchenData.Rules.RADIUS_OF_TOPPINGS_WITHIN_CRUST - maxScale / 2.0;
+
+        var numSteps = count - used;
+        if (numSteps <= 1)
+        {
+            for (var i = 0; i < numSteps; i++)
+            {
+                // right in center of mouth  
+                ret.push([smileCenter.x + smileRadius, smileCenter.y + smileRadius]);
+            }
+        }
+        else
+        {
+            var minAngle = PI / 2 - (PI / 4.0);
+            var maxAngle = PI / 2 + (PI / 4.0);
+
+            var angleInc = (maxAngle - minAngle) / (numSteps - 1);
+            for (var i = 0; i < numSteps; i++)
+            {
+                var angle = minAngle + i * angleInc;
+
+                // rotate the vec around ang
+                // calculate point
+                var x = smileRadius * Math.cos(angle);
+                var y = smileRadius * Math.sin(angle);
+
+                // offset by smile center
+                x = x + smileCenter[0];
+                y = y + smileCenter[1];
+     
+                ret.push([x,y]);
+            }
+        }
+/*
         // place mouth - line for now
         var startX = -.25;
     
@@ -221,7 +267,8 @@ class FaceScatter extends Scatter {
                 ret.push([x,y]);
             }
         }
-    
+    */
+
         return ret;
     }
 }
@@ -522,6 +569,10 @@ function generateDisplayList(pizza, KitchenData) {
 
         // now call scatter to get positions, then append them
         var positions = scatter.scatter(rand, toppingCount, toppingRenderObjs, KitchenData);
+
+    // HACK force face
+    //var positions = Scatter.table["Face"].scatter(rand, toppingCount, toppingRenderObjs, KitchenData);
+
         // TODO: assert positions.length == toppingCount
         for (var iCount = 0; iCount < toppingCount; iCount++)
         {
