@@ -1,5 +1,7 @@
 const fs = require('fs');
 const path = require('path');
+const csv = require('csv-parser');
+
 
 // HACK! for now load it from the hand-made object
 //const {KitchenData, HACK_prepKitchenData} = require('./js/Pizza/KitchenData.js');
@@ -184,9 +186,69 @@ function AddTopping(fullPath, name, kd)
     kd.Toppings.push(entry);
 }
 
-// iterate folder
+// local foldername of images which should match the images deployed to website
 const ingredients_folder_name = "../oxbone.com/Pizza/images/ingredients2"
 
+
+// read the ingredientsDB CSV file here
+
+fs.createReadStream('ToppingsSizeDB.csv')
+  .pipe(csv())
+  .on('data', (row) => {
+    //console.log(row);
+/*
+// this is what row looks like:
+{
+  unique_id: '7014',
+  category: 'extra-crypto',
+  variation: 'laszlo',
+  nice_name: 'Laszlo',
+  artist: 'Alex',
+  mafia_name: '',
+  twitter: '',
+  instagram: '',
+  'filename paste': '7014-extra-crypto-laszlo',
+  file: 'Y',
+  inches: '5',
+  inch_variance: '',
+  radius_max: '',
+  serving_min: '',
+  serving_max: '',
+  pie_count: '',
+  layer: ''
+}
+*/
+
+    const filename_base = row["filename paste"];
+    //console.log(filename_base);
+
+     // see if this file exists 
+    var filename_full = filename_base;
+    // append .png 
+    filename_full += ".png";
+    filename_full = ingredients_folder_name + "/" + filename_full;
+
+    //console.log(filename_full);
+
+
+    // see if this file exists
+    if (fs.existsSync(filename_full) == true)
+    {
+      //  console.log(filename_full + " exists");
+    }
+    else
+    {
+        //console.log(filename_full + " does NOT exist");  
+        console.log(row["unique_id"] + " with filename " + filename_base + " does NOT exist");         
+    }
+
+  })
+  .on('end', () => {
+    console.log('CSV file successfully processed');
+  });
+
+  
+// iterate folder
 var files = fs.readdirSync(ingredients_folder_name);
 files.forEach(function(file) {
 
