@@ -1,15 +1,15 @@
 var http = require("http");
 var url = require('url');
 const fs = require('fs');
-
-const { createCanvas, loadImage } = require('canvas');
-
-const {CanvasRenderer} = require('./render/CanvasRenderer.js');
 const {Pizza, generateDisplayList} = require('./js/Pizza/AllPizza.js');
 
 // load the kitchen data from JSON
 let KitchenData = require('./kitchen_data.json');
 
+/*
+const { createCanvas, loadImage } = require('canvas');
+
+const {CanvasRenderer} = require('./render/CanvasRenderer.js');
 
 
 ///////
@@ -91,7 +91,7 @@ function render(displayBundle, dna)
   var filename = "./" + dna + ".png";
   fs.writeFileSync(filename, buffer)
 }
-
+*/
 ///////
 
 http.createServer(function(request, response) {
@@ -138,7 +138,7 @@ http.createServer(function(request, response) {
         ret.ingredientsData = pizza.generateIngredientsData(KitchenData);
         ret.pizzaProbability = pizza.calculatePizzaProbability(ret.ingredientsData);   
         ret.description = pizza.generatePizzaDescription(ret.ingredientsData);
-
+/*
         // render pizza image, save image, save JSON
         // TODO: add saved image URL to json before saving
         if (false)
@@ -152,6 +152,7 @@ http.createServer(function(request, response) {
           let json = JSON.stringify(ret);
           fs.writeFileSync(ret.dna + '.json', json);
         }
+ */       
       }
 
 
