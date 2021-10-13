@@ -48,7 +48,7 @@ function isA(tokens, str)
 }
 
 
-function AddBox(fullPath, name, kd)
+function AddBox(fullPath, name, minScale, maxScale, minPer, maxPer, kd)
 {
     if (kd.Boxes == undefined)
         kd.Boxes = new Array();
@@ -57,8 +57,8 @@ function AddBox(fullPath, name, kd)
     //    name: "Thick",
         rarityLevel: 1,
    //     imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/1100-base-crust-thick.png"],
-        sizeMinMax: [1.0, 1.0],
-        countMinMax: [1,1],
+        sizeMinMax: [minScale, maxScale],
+        countMinMax: [minPer, maxPer],
         rotationMinMax: [0,0]
     };
 
@@ -71,7 +71,7 @@ function AddBox(fullPath, name, kd)
     kd.Boxes.push(entry);
 }
 
-function AddPaper(fullPath, name, kd)
+function AddPaper(fullPath, name, minScale, maxScale, minPer, maxPer, kd)
 {
     if (kd.Papers == undefined)
         kd.Papers = new Array();
@@ -80,8 +80,8 @@ function AddPaper(fullPath, name, kd)
     //    name: "Thick",
         rarityLevel: 1,
    //     imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/1100-base-crust-thick.png"],
-        sizeMinMax: [1.0, 1.0],
-        countMinMax: [1,1],
+        sizeMinMax: [minScale, maxScale],
+        countMinMax: [minPer, maxPer],
         rotationMinMax: [0,0]
     };
 
@@ -94,7 +94,7 @@ function AddPaper(fullPath, name, kd)
     kd.Papers.push(entry);
 }
 
-function AddCrust(fullPath, name, kd)
+function AddCrust(fullPath, name, minScale, maxScale, minPer, maxPer, kd)
 {
     if (kd.Crusts == undefined)
         kd.Crusts = new Array();
@@ -103,8 +103,8 @@ function AddCrust(fullPath, name, kd)
     //    name: "Thick",
         rarityLevel: 1,
    //     imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/1100-base-crust-thick.png"],
-        sizeMinMax: [1.0, 1.0],
-        countMinMax: [1,1],
+        sizeMinMax: [minScale, maxScale],
+        countMinMax: [minPer, maxPer],
         rotationMinMax: [-3.14159,3.14159]
     };
 
@@ -117,7 +117,7 @@ function AddCrust(fullPath, name, kd)
     kd.Crusts.push(entry);
 }
 
-function AddSauce(fullPath, name, kd)
+function AddSauce(fullPath, name, minScale, maxScale, minPer, maxPer, kd)
 {
     if (kd.Sauces == undefined)
         kd.Sauces = new Array();
@@ -126,8 +126,8 @@ function AddSauce(fullPath, name, kd)
     //    name: "Thick",
         rarityLevel: 1,
    //     imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/1100-base-crust-thick.png"],
-        sizeMinMax: [1.0, 1.0],
-        countMinMax: [1,1],
+        sizeMinMax: [minScale, maxScale],
+        countMinMax: [minPer, maxPer],
         rotationMinMax: [-3.14159,3.14159]
     };
 
@@ -140,7 +140,7 @@ function AddSauce(fullPath, name, kd)
     kd.Sauces.push(entry);
 }
 
-function AddCheese(fullPath, name, kd)
+function AddCheese(fullPath, name, minScale, maxScale, minPer, maxPer, kd)
 {
     if (kd.Cheeses == undefined)
         kd.Cheeses = new Array();
@@ -149,8 +149,8 @@ function AddCheese(fullPath, name, kd)
     //    name: "Thick",
         rarityLevel: 1,
    //     imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/1100-base-crust-thick.png"],
-        sizeMinMax: [1.0, 1.0],
-        countMinMax: [1,1],
+        sizeMinMax: [minScale, maxScale],
+        countMinMax: [minPer, maxPer],
         rotationMinMax: [-3.14159,3.14159]
     };
 
@@ -163,7 +163,7 @@ function AddCheese(fullPath, name, kd)
     kd.Cheeses.push(entry);
 }
 
-function AddTopping(fullPath, name, kd)
+function AddTopping(fullPath, name, minScale, maxScale, minPer, maxPer, kd)
 { 
     if (kd.Toppings == undefined)
         kd.Toppings = new Array();
@@ -172,8 +172,8 @@ function AddTopping(fullPath, name, kd)
     //    name: "Pepperoni",
         rarityLevel: 1,
     //    imageUrls: ["http://www.oxbone.com/Pizza/Images/Ingredients/4000-topping-meat-pepperoni.png"],
-        sizeMinMax: [0.05, 0.125],
-        countMinMax: [2,20],
+        sizeMinMax: [minScale, maxScale],
+        countMinMax: [minPer, maxPer],
         rotationMinMax: [-3.14159,3.14159]
     };
 
@@ -187,39 +187,38 @@ function AddTopping(fullPath, name, kd)
 }
 
 // local foldername of images which should match the images deployed to website
-const ingredients_folder_name = "../oxbone.com/Pizza/images/ingredients2"
+const ingredients_folder_name = "../oxbone.com/Pizza/images/ingredients3"
 
 
 // read the ingredientsDB CSV file here
 
-fs.createReadStream('ToppingsSizeDB.csv')
+fs.createReadStream('ingredients-db_2021_10_11.csv')
   .pipe(csv())
   .on('data', (row) => {
-    //console.log(row);
+  //  console.log(row);
+
 /*
-// this is what row looks like:
+// each row looks like this:
 {
-  unique_id: '7014',
-  category: 'extra-crypto',
-  variation: 'laszlo',
-  nice_name: 'Laszlo',
-  artist: 'Alex',
-  mafia_name: '',
-  twitter: '',
-  instagram: '',
-  'filename paste': '7014-extra-crypto-laszlo',
-  file: 'Y',
-  inches: '5',
-  inch_variance: '',
-  radius_max: '',
-  serving_min: '',
-  serving_max: '',
-  pie_count: '',
-  layer: ''
+  unique_id: '9410',
+  category: 'omakase-kaleprotein',
+  topping: 'squid',
+  filename_paste: '9410-omakase-kaleprotein-squid',
+  on_disk: 'Y',
+  img_size: '#N/A',
+  inches: '3',
+  scale_factor: '0.5',
+  inch_variance: '0.2',
+  min_per: '5',
+  max_per: '19',
+  'variant rarity': '',
+  'topping rarity': '',
+  scatters: '',
+  description: '',
+  mark_end: '.'
 }
 */
-
-    const filename_base = row["filename paste"];
+    const filename_base = row["filename_paste"];
     //console.log(filename_base);
 
      // see if this file exists 
@@ -228,13 +227,56 @@ fs.createReadStream('ToppingsSizeDB.csv')
     filename_full += ".png";
     filename_full = ingredients_folder_name + "/" + filename_full;
 
-    //console.log(filename_full);
+    // get scale
+    var scale = parseFloat(row["inches"]) / 18.0;
+    // correct for NaN
+    if (isNaN(scale) == true)
+        scale = 0.1;
+    // TOOD: for now minScale = maxScale
+    var minScale = scale;
+    var maxScale = scale;
+
+    // get min/max instance count
+    var minPer = parseInt(row["min_per"]);
+    var maxPer = parseInt(row["max_per"]);
+    // correct for NaN
+    if (isNaN(minPer) == true)
+        minPer = 10;
+    if (isNaN(maxPer) == true)
+        maxPer = 20;
+
+    // get category
+    var category = row["category"].toLowerCase();
+
+    // get name
+    var niceName = row["topping"];
+
+    // TODO: rarity. for now all will have same rarity
+
+    // debug out 
+    //console.log(filename_full + ". scale: " + scale + ". minPer: " + minPer + ". maxPer: " + maxPer);
 
 
     // see if this file exists
     if (fs.existsSync(filename_full) == true)
     {
       //  console.log(filename_full + " exists");
+
+      var fullPath = "https://www.oxbone.com/Pizza/Images/Ingredients3/" + filename_base + ".png";
+
+        // add to kitchen data
+        if (category == "box")
+            AddBox(fullPath, niceName, minScale, maxScale, minPer, maxPer, KitchenData);
+        else if (category == "paper")
+            AddPaper(fullPath, niceName, minScale, maxScale, minPer, maxPer, KitchenData);
+        else if (category == "crust")
+            AddCrust(fullPath, niceName, minScale, maxScale, minPer, maxPer, KitchenData);
+        else if (category == "sauce")
+            AddSauce(fullPath, niceName, minScale, maxScale, minPer, maxPer, KitchenData); 
+        else if (category == "cheese")
+            AddCheese(fullPath, niceName, minScale, maxScale, minPer, maxPer, KitchenData);  
+        else // assume topping
+            AddTopping(fullPath, niceName, minScale, maxScale, minPer, maxPer, KitchenData);    
     }
     else
     {
@@ -245,9 +287,16 @@ fs.createReadStream('ToppingsSizeDB.csv')
   })
   .on('end', () => {
     console.log('CSV file successfully processed');
+
+    // since we don't have a KitchenData prep tool yet, prep it here
+    HACK_prepKitchenData(KitchenData);
+
+    // now write the KitchenData out to JSON file
+    let data = JSON.stringify(KitchenData);
+    fs.writeFileSync('kitchen_data.json', data);
   });
 
-  
+/*
 // iterate folder
 var files = fs.readdirSync(ingredients_folder_name);
 files.forEach(function(file) {
@@ -295,10 +344,4 @@ files.forEach(function(file) {
                 AddTopping(fullPath, tokens[3], KitchenData);        
     }
 })
-
-// since we don't have a KitchenData prep tool yet, prep it here
-HACK_prepKitchenData(KitchenData);
-
-// now write the KitchenData out to JSON file
-let data = JSON.stringify(KitchenData);
-fs.writeFileSync('kitchen_data.json', data);
+*/
