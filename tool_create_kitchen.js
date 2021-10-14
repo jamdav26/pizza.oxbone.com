@@ -21,11 +21,11 @@ KitchenData.Rules = {
 // Scatter Methods
 KitchenData.ScatterMethods = [
     {name: "Random", rarityLevel: 1},
-    {name: "Spiral", rarityLevel: 2},
-    {name: "Face", rarityLevel: 3},  
-    {name: "Spokes", rarityLevel: 2},     
-    {name: "Concentric Circles", rarityLevel: 2}, 
-    {name: "Grid", rarityLevel: 1},                     
+    {name: "Spiral", rarityLevel: 4},
+    {name: "Face", rarityLevel: 6},  
+    {name: "Spokes", rarityLevel: 5},     
+    {name: "Concentric Circles", rarityLevel: 5}, 
+    {name: "Grid", rarityLevel: 3},                     
 ];
 
 // TODO: get these by iterating the files in the ingredients-db folder
