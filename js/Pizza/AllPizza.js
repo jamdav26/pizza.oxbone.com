@@ -71,6 +71,21 @@ class Vec2 {
         this.x = x;
         this.y = y;
     }
+
+    distance(v)
+    {
+        var distSquared = this.distanceSquared(v);
+        return Math.sqrt(distSquared);
+    }
+
+    distanceSquared(v)
+    {
+        var dX = (this.x - v.x);
+        dX *= dX;
+        var dY = (this.y - v.y);
+        dY *= dY;
+        return (dX + dY);
+    }  
 }
 
 /////////////////////////////////////////////////////////////////
@@ -443,6 +458,10 @@ class GridScatter extends Scatter {
         {
             for (var j = 0; j < gridDimX; j++)
             {
+                // don't walk off the list!
+                if (placedCount >= renderObjList.length)
+                    break;
+
                 var left = start + gridSizeX * j;
                 var top = start + gridSizeY * i;
 
@@ -456,9 +475,8 @@ class GridScatter extends Scatter {
                 var varianceY = gridSizeY / 2.0 - objScale / 2.0;
                 if (varianceY < 0)
                     varianceY = gridSizeY / 2.0;
-
                var x = randomRangeFloat(rand, left + varianceX, left + gridSizeX - varianceX);
-                var y = randomRangeFloat(rand, top + varianceY, top + gridSizeY - varianceY);  // ????? 
+                var y = randomRangeFloat(rand, top + varianceY, top + gridSizeY - varianceY); 
              
                 // this picks exact center of grid.
            //     var x = left + gridSizeX/2;
@@ -466,6 +484,10 @@ class GridScatter extends Scatter {
                 
                 // TODO: if this center + scale pushes it past the allowable edge, push it back
                 // inward towards center
+               // var vec = new Vec2(x, y);
+               // var distFromCenter = vec.distance(new Vec2(0,0));
+               // if (distFromCenter + objScale / 2 >)
+
 
                 ret.push([x,y]);  
                 placedCount++;      
