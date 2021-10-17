@@ -725,7 +725,7 @@ function KITCHEN_chooseItem(items, diceRoll) {
 function Pizza() {
 }
 
-Pizza.prototype.makeRandom = function(overrides, KitchenData) 
+Pizza.prototype.makeRandom = function(overrides, toppingCount, KitchenData) 
 {
     var pizzaDNA = 0;
 
@@ -755,8 +755,10 @@ Pizza.prototype.makeRandom = function(overrides, KitchenData)
 
     // randomly choose toppings
     this.toppingIndices = [];
-    // TODO: num toppings rarity array
-    var numToppings = randomRange(localRand, 0, Math.min(KitchenData.Rules.MAX_TOPPINGS_PER_PIZZA, KitchenData.Toppings.length));
+    // num toppings was passed into us, but if it's null then randomize it.
+    var numToppings = toppingCount;
+    if (numToppings == null)
+        numToppings = randomRange(localRand, 0, Math.min(KitchenData.Rules.MAX_TOPPINGS_PER_PIZZA, KitchenData.Toppings.length));
     for (var iTopping = 0; iTopping < numToppings; iTopping++)
     {
         index = KITCHEN_chooseItem(KitchenData.Toppings, randomRangeFloat(localRand, 0.0, 1.0));

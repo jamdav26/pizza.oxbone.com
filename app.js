@@ -115,11 +115,15 @@ http.createServer(function(request, response) {
       var q = url.parse(request.url, true);
       var qdata = q.query; 
       var dna = qdata.dna;
+      var toppingCount = qdata.toppingCount;
+      if (toppingCount == null || toppingCount == undefined)  
+        toppingCount = null;  
+
 
       // make pizza
       var pizza = new Pizza();
       if (dna == null || dna == undefined)
-        pizza.makeRandom({}, KitchenData);
+        pizza.makeRandom({}, toppingCount, KitchenData);
       else
         pizza.makeFromDna(dna);  
 
