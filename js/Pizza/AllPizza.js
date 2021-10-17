@@ -438,7 +438,7 @@ class GridScatter extends Scatter {
         var start = -0.5 + (0.5 - KitchenData.Rules.RADIUS_OF_TOPPINGS_WITHIN_CRUST) + maxScale/2;
         var squareWidth = 2 * Math.abs(start);
         var gridSizeX = squareWidth / gridDimX;   
-        var gridSizeY = squareWidth / gridDimY;         
+        var gridSizeY = squareWidth / gridDimY;       
         for (var i = 0; i < gridDimY; i++)
         {
             for (var j = 0; j < gridDimX; j++)
@@ -446,14 +446,23 @@ class GridScatter extends Scatter {
                 var left = start + gridSizeX * j;
                 var top = start + gridSizeY * i;
 
-                // pick random pos in this grid 
-                // TODO: we could shrink this by the scale of the topping
-          //      var variance = 
-           //     var x = randomRangeFloat(rand, left, left + gridSize);
-           //     var y = randomRangeFloat(rand, top, top + gridSize);  // ????? 
+                // calculate scale of this object
+                var objScale = renderObjList[placedCount].scale;
+
+                // pick random pos in this grid, shrinking area by the scale of the topping
+                var varianceX = gridSizeX / 2.0 - objScale / 2.0;
+                if (varianceX < 0)
+                    varianceX = gridSizeX / 2.0;
+                var varianceY = gridSizeY / 2.0 - objScale / 2.0;
+                if (varianceY < 0)
+                    varianceY = gridSizeY / 2.0;
+
+               var x = randomRangeFloat(rand, left + varianceX, left + gridSizeX - varianceX);
+                var y = randomRangeFloat(rand, top + varianceY, top + gridSizeY - varianceY);  // ????? 
              
-                var x = left + gridSizeX/2;
-                var y = top + gridSizeY/2;   
+                // this picks exact center of grid.
+           //     var x = left + gridSizeX/2;
+            //    var y = top + gridSizeY/2;   
                 
                 // TODO: if this center + scale pushes it past the allowable edge, push it back
                 // inward towards center
