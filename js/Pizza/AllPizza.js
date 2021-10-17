@@ -422,8 +422,9 @@ class GridScatter extends Scatter {
         var ret = [];
 
         // divide the disk into grids and put a topping in each one.
-        var gridDim = Math.floor(Math.sqrt(count));
- 
+        var gridDimX = Math.floor(Math.sqrt(count));
+        var gridDimY = count / gridDimX;
+
         // iterate grids and place an instance randomly in each
         var placedCount = 0;
         // calc the max scale in the topping list
@@ -436,20 +437,27 @@ class GridScatter extends Scatter {
          // base entire square off of the radius - the max scale
         var start = -0.5 + (0.5 - KitchenData.Rules.RADIUS_OF_TOPPINGS_WITHIN_CRUST) + maxScale/2;
         var squareWidth = 2 * Math.abs(start);
-        var gridSize = squareWidth / gridDim;   
-        for (var i = 0; i < gridDim; i++)
+        var gridSizeX = squareWidth / gridDimX;   
+        var gridSizeY = squareWidth / gridDimY;         
+        for (var i = 0; i < gridDimY; i++)
         {
-            for (var j = 0; j < gridDim; j++)
+            for (var j = 0; j < gridDimX; j++)
             {
-                var left = start + gridSize * j;
-                var top = start + gridSize * i;
+                var left = start + gridSizeX * j;
+                var top = start + gridSizeY * i;
 
                 // pick random pos in this grid 
                 // TODO: we could shrink this by the scale of the topping
-             //   var x = randomRangeFloat(rand, left, left + gridSize);
-              //  var y = randomRangeFloat(rand, top, top + gridSize);  // ????? 
-                var x = left + gridSize/2;
-                var y = top + gridSize/2;                 
+          //      var variance = 
+           //     var x = randomRangeFloat(rand, left, left + gridSize);
+           //     var y = randomRangeFloat(rand, top, top + gridSize);  // ????? 
+             
+                var x = left + gridSizeX/2;
+                var y = top + gridSizeY/2;   
+                
+                // TODO: if this center + scale pushes it past the allowable edge, push it back
+                // inward towards center
+
                 ret.push([x,y]);  
                 placedCount++;      
             }          
