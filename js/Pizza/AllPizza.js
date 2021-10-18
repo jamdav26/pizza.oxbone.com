@@ -450,7 +450,7 @@ class GridScatter extends Scatter {
             maxScale = renderObjList[iRO].scale;
         }
          // base entire square off of the radius - the max scale
-        var start = -0.5 + (0.5 - KitchenData.Rules.RADIUS_OF_TOPPINGS_WITHIN_CRUST) + maxScale;
+        var start = -0.5 + (0.5 - KitchenData.Rules.RADIUS_OF_TOPPINGS_WITHIN_CRUST) + maxScale/2;
         var squareWidth = 2 * Math.abs(start);
         var gridSizeX = squareWidth / gridDimX;   
         var gridSizeY = squareWidth / gridDimY;       
