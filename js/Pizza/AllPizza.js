@@ -438,7 +438,7 @@ class GridScatter extends Scatter {
 
         // divide the disk into grids and put a topping in each one.
         var gridDimX = Math.floor(Math.sqrt(count));
-        var gridDimY = count / gridDimX;
+        var gridDimY = Math.ceil(count / gridDimX);
 
         // iterate grids and place an instance randomly in each
         var placedCount = 0;
@@ -450,7 +450,7 @@ class GridScatter extends Scatter {
             maxScale = renderObjList[iRO].scale;
         }
          // base entire square off of the radius - the max scale
-        var start = -0.5 + (0.5 - KitchenData.Rules.RADIUS_OF_TOPPINGS_WITHIN_CRUST) + maxScale/2;
+        var start = -0.5 + (0.5 - KitchenData.Rules.RADIUS_OF_TOPPINGS_WITHIN_CRUST) + maxScale / 2;
         var squareWidth = 2 * Math.abs(start);
         var gridSizeX = squareWidth / gridDimX;   
         var gridSizeY = squareWidth / gridDimY;       
@@ -478,10 +478,14 @@ class GridScatter extends Scatter {
                var x = randomRangeFloat(rand, left + varianceX, left + gridSizeX - varianceX);
                 var y = randomRangeFloat(rand, top + varianceY, top + gridSizeY - varianceY); 
              
-                // this picks exact center of grid.
-           //     var x = left + gridSizeX/2;
-            //    var y = top + gridSizeY/2;   
-                
+                // slam to center of grid
+             //   x = left + gridSizeX/2;
+             //   y = top + gridSizeY/2;   
+     
+                // test slam to grid UL
+           //     x = left;
+           //     y = top; 
+
                 // TODO: if this center + scale pushes it past the allowable edge, push it back
                 // inward towards center
                // var vec = new Vec2(x, y);
@@ -501,7 +505,7 @@ class GridScatter extends Scatter {
             ret.push([0,0]);  
             placedCount++;
         }
-
+/*
         // for fun, rotate all points by angle
         var rads = randomRangeFloat(rand, -PI, PI);
         for (var i = 0; i < ret.length; i++) {
@@ -511,7 +515,7 @@ class GridScatter extends Scatter {
             ret[i][0] = vec.x;
             ret[i][1] = vec.y;
         }
-
+*/
         return ret;
     }
 }
