@@ -86,6 +86,40 @@ class Vec2 {
         dY *= dY;
         return (dX + dY);
     }  
+
+    length()
+    {  
+        return Math.sqrt(this.lengthSquared());
+    }
+
+    lengthSquared()
+    {
+        return this.x * this.x + this.y * this.y;
+    }
+
+    normalize()
+    {
+        var len = this.length();
+        this.x /= len;
+        this.y /= len;
+    }
+
+    scale(s)
+    {
+        this.x *= s;
+        this.y *= s;
+    }   
+
+    add(v)
+    {
+        this.x += v.x;
+        this.y += v.y;
+    }
+
+    vecTo(v)
+    {
+        return new Vec2(v.x - this.x, v.y - this.y);
+    }
 }
 
 /////////////////////////////////////////////////////////////////
@@ -488,12 +522,23 @@ class GridScatter extends Scatter {
 
                 // TODO: if this center + scale pushes it past the allowable edge, push it back
                 // inward towards center
-               // var vec = new Vec2(x, y);
-               // var distFromCenter = vec.distance(new Vec2(0,0));
-               // if (distFromCenter + objScale / 2 >)
+               var zeroVec = new Vec2(0,0);
+               var vec = new Vec2(x, y);           
+               var vecToCenter = vec.vecTo(zeroVec);      
+               var distFromCenter = vec.length() + objScale;
+               var distOver = distFromCenter - KitchenData.Rules.RADIUS_OF_TOPPINGS_WITHIN_CRUST;
+               //console.log("distanceFromCenter = " + distFromCenter);
+               if (distOver > 0.0)
+               {
+                    distOver = Math.min(distOver, (1.0 - objScale)/2);
+                 //  console.log("moving back by " + distOver);
+                   //move back towards center by distOver
+                   vecToCenter.normalize();
+                   vecToCenter.scale(distOver);
+                   vec.add(vecToCenter);
+               }
 
-
-                ret.push([x,y]);  
+                ret.push([vec.x,vec.y]);  
                 placedCount++;      
             }          
         }
@@ -505,7 +550,7 @@ class GridScatter extends Scatter {
             ret.push([0,0]);  
             placedCount++;
         }
-/*
+
         // for fun, rotate all points by angle
         var rads = randomRangeFloat(rand, -PI, PI);
         for (var i = 0; i < ret.length; i++) {
@@ -515,7 +560,7 @@ class GridScatter extends Scatter {
             ret[i][0] = vec.x;
             ret[i][1] = vec.y;
         }
-*/
+
         return ret;
     }
 }
