@@ -187,12 +187,12 @@ function AddTopping(fullPath, name, minScale, maxScale, minPer, maxPer, kd)
 }
 
 // local foldername of images which should match the images deployed to website
-const ingredients_folder_name = "../oxbone.com/Pizza/images/Ingredients5"
+const ingredients_folder_name = "../oxbone.com/Pizza/images/Ingredients6"
 
 
 // read the ingredientsDB CSV file here
 
-fs.createReadStream('ingredients-db_2021_10_20.csv')
+fs.createReadStream('ingredients-db_2021_10_29.csv')
   .pipe(csv())
   .on('data', (row) => {
   //  console.log(row);
@@ -249,7 +249,11 @@ fs.createReadStream('ingredients-db_2021_10_20.csv')
     var category = row["category"].toLowerCase();
 
     // get name
-    var niceName = row["topping"];
+    var niceName = row["pretty_name"];
+    // for all variants I guess I need to find the main
+    // topping entry, but not gonna do that now.
+    if (niceName == "variant")
+        niceName = row["topping"];
 
     // TODO: rarity. for now all will have same rarity
 
@@ -262,7 +266,7 @@ fs.createReadStream('ingredients-db_2021_10_20.csv')
     {
       //  console.log(filename_full + " exists");
 
-      var fullPath = "https://www.oxbone.com/Pizza/Images/Ingredients5/" + filename_base + ".png";
+      var fullPath = "https://www.oxbone.com/Pizza/Images/Ingredients6/" + filename_base + ".png";
 
         // add to kitchen data
         if (category == "box")

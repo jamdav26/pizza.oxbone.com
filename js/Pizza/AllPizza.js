@@ -1050,7 +1050,7 @@ Pizza.prototype.generatePizzaDescription = function(ingredientsData) {
     var desc = "";
 
     // crust
-    desc = "A " + ingredientsData.crust.name + " crust ";
+    desc = "A " + ingredientsData.crust.name + " ";
     desc += " (" + getDisplayableProbability(ingredientsData.crust.probability) + "%)";
     // sauces
     for (var i = 0; i < ingredientsData.sauces.length; i++) {
@@ -1065,7 +1065,7 @@ Pizza.prototype.generatePizzaDescription = function(ingredientsData) {
         desc += ", ";
     
       if (i == ingredientsData.sauces.length - 1)        
-        desc += " sauce";
+        desc += " ";
     }
 
     // cheeses
@@ -1081,7 +1081,7 @@ Pizza.prototype.generatePizzaDescription = function(ingredientsData) {
         desc += ", ";
     
     if (i == ingredientsData.cheeses.length - 1)        
-        desc += " cheese";
+        desc += " ";
 
     }  
 
